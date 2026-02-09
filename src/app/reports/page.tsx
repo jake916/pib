@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import styles from './reports.module.css';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ interface Feedback {
 
 type FilterTab = 'all' | 'pending' | 'replied';
 
-export default function ReportsPage() {
+function ReportsContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [searchValue, setSearchValue] = useState('');
@@ -112,17 +112,7 @@ export default function ReportsPage() {
     const repliedCount = feedbackList.filter(f => f.status === 'replied').length;
 
     return (
-        <main className={styles.page}>
-            {/* Hero Section */}
-            <section className={styles.hero}>
-                <div className="container">
-                    <h1 className={styles.heroTitle}>Track Your Feedback</h1>
-                    <p className={styles.heroSubtitle}>
-                        Enter your email or phone number to view all your submitted feedback and reports
-                    </p>
-                </div>
-            </section>
-
+        <>
             {/* Search Section */}
             <section className={styles.searchSection}>
                 <div className="container">
@@ -233,6 +223,26 @@ export default function ReportsPage() {
                     )}
                 </div>
             </section>
+        </>
+    );
+}
+
+export default function ReportsPage() {
+    return (
+        <main className={styles.page}>
+            {/* Hero Section */}
+            <section className={styles.hero}>
+                <div className="container">
+                    <h1 className={styles.heroTitle}>Track Your Feedback</h1>
+                    <p className={styles.heroSubtitle}>
+                        Enter your email or phone number to view all your submitted feedback and reports
+                    </p>
+                </div>
+            </section>
+
+            <Suspense fallback={<div className="container"><p>Loading search...</p></div>}>
+                <ReportsContent />
+            </Suspense>
         </main>
     );
 }
