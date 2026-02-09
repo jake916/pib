@@ -1,0 +1,89 @@
+/* Impact Section */
+.impact {
+    background-color: #FFFFFF;
+    padding: 4rem 0;
+    /* Reduced padding for cleaner look */
+    border-bottom: 1px solid var(--border);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    /* Removing gap to handle borders cleanly */
+    text-align: left;
+    /* Align text to the left as per design */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Left align items */
+    justify-content: center;
+    padding: 0 2rem;
+    border-right: 1px solid #E5E5E5;
+    /* Light divider */
+}
+
+.statItem:last-child {
+    border-right: none;
+}
+
+.statItem:first-child {
+    padding-left: 0;
+}
+
+/* Global classes targeting component output */
+.impact :global(.stat-item) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 2rem;
+    border-right: 1px solid #E5E5E5;
+}
+
+.impact :global(.stat-item):first-child {
+    padding-left: 0;
+}
+
+.impact :global(.stat-item):last-child {
+    border-right: none;
+}
+
+.impact :global(.stat-label) {
+    color: #888888;
+    font-size: 0.75rem;
+    /* Smaller font size */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.impact :global(.stat-number) {
+    font-size: 2.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0F2D28;
+    /* Dark green/black tone from image */
+    font-family: var(--font-poppins);
+    display: flex;
+    align-items: baseline;
+}
+
+@media (max-width: 900px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .impact :global(.stat-item) {
+        border-right: none;
+        padding: 0;
+        align-items: center;
+        text-align: center;
+    }
+}

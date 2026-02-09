@@ -1,0 +1,298 @@
+/* Hero Section */
+.hero {
+    background-color: var(--pib-black);
+    color: #FFFFFF;
+    padding: 14rem 0 8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.heroBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.heroBackground img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    /* Dim the image */
+}
+
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+    z-index: 2;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 3;
+    max-width: 800px;
+}
+
+.heroTitle {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* Overview Section */
+.overview {
+    padding: 8rem 0;
+    background-color: #FFFFFF;
+}
+
+/* Common Split Section Layout */
+.splitSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+}
+
+.splitSectionReversed {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+}
+
+.splitSectionReversed .imageContainer {
+    order: 1;
+    /* Image first on reversed (desktop) */
+}
+
+.splitSectionReversed .contentContainer {
+    order: 2;
+}
+
+.imageContainer {
+    position: relative;
+    height: 500px;
+    /* Taller images */
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.imageContainer img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.imageContainer:hover img {
+    transform: scale(1.03);
+}
+
+.overviewText {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #4B5563;
+    margin-bottom: 2rem;
+}
+
+/* Mandate & Vision Sections */
+.sectionBlock {
+    padding: 8rem 0;
+}
+
+.bgSurface {
+    background-color: var(--surface);
+}
+
+.bgWhite {
+    background-color: #FFFFFF;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--pib-black);
+    position: relative;
+    line-height: 1.2;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.listItem {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+.listItem::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--pib-red);
+    border-radius: 50%;
+}
+
+.visionText {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: #374151;
+    font-weight: 500;
+    font-style: italic;
+    border-left: 4px solid var(--pib-red);
+    padding-left: 2rem;
+    margin-top: 1rem;
+}
+
+/* Full Width Image Section */
+.fullWidthImageSection {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    /* Prominent height */
+    overflow: hidden;
+}
+
+.fullWidthImageSection img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Leadership Section */
+.leadership {
+    padding: 8rem 0;
+    background-color: #FFFFFF;
+}
+
+.leadershipHeader {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 5rem;
+}
+
+.leadershipGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+}
+
+.leaderCard {
+    background: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #F3F4F6;
+}
+
+.leaderCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.leaderImage {
+    height: 380px;
+    width: 100%;
+    background-color: #E5E7EB;
+    position: relative;
+    overflow: hidden;
+}
+
+.leaderImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.leaderCard:hover .leaderImage img {
+    transform: scale(1.05);
+    /* Subtle zoom on hover */
+}
+
+.leaderInfo {
+    padding: 2rem;
+    text-align: center;
+}
+
+.leaderName {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--pib-black);
+    margin-bottom: 0.5rem;
+}
+
+.leaderRole {
+    font-size: 0.9rem;
+    color: var(--pib-red);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.leaderBio {
+    font-size: 0.95rem;
+    color: #6B7280;
+    line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+
+    .splitSection,
+    .splitSectionReversed {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+
+    .splitSectionReversed .imageContainer {
+        order: 0;
+        /* Reset order on mobile */
+    }
+
+    .splitSectionReversed .contentContainer {
+        order: 0;
+    }
+
+    .heroTitle {
+        font-size: 2.5rem;
+    }
+
+    .hero {
+        padding-top: 10rem;
+    }
+
+    .imageContainer {
+        height: 300px;
+    }
+
+    .fullWidthImageSection {
+        height: 40vh;
+    }
+}

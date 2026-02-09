@@ -1,0 +1,94 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #ffffff;
+    border-right: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.logoArea {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logoText {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.logoText span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #666;
+}
+
+.nav {
+    padding: 1.5rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    /* Add gap for icon */
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.navLink:hover {
+    background-color: #f5f5f5;
+    color: #1a1a1a;
+}
+
+.navLinkActive {
+    background-color: #fef2f2;
+    /* Light red shade */
+    color: #dc2626;
+    /* Darker red */
+}
+
+.footer {
+    padding: 1.5rem;
+    border-top: 1px solid #eaeaea;
+}
+
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #d32f2f;
+    /* Red for logout */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.logoutBtn:hover {
+    background-color: #ffebee;
+}
