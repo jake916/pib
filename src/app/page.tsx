@@ -3,45 +3,74 @@ import statStyles from "./stats.module.css";
 import AnimatedView from "@/components/AnimatedView";
 import StatCounter from "@/components/StatCounter";
 import Link from "next/link";
+import { getRandomPhotos, getFeaturedPhotos } from "./actions/media";
+import { getPosts } from "@/app/actions/blog";
+import HeroSlider from "@/components/HeroSlider";
 
-export default function Home() {
+export default async function Home() {
+  const [randomPhotos, featuredPhotos, recentPostsRaw] = await Promise.all([
+    getRandomPhotos(8),
+    getFeaturedPhotos(),
+    getPosts({ publishedOnly: true }).catch(() => [])
+  ]);
+
+  const displayPosts = recentPostsRaw.slice(0, 3);
+
+  const defaultMedia: any[] = [
+    { id: 'd1', src: '/media-bridge.png', title: 'Infrastructure', type: 'image', date: '' },
+    { id: 'd2', src: '/media-solar.png', title: 'Renewable Energy', type: 'image', date: '' },
+    { id: 'd3', src: '/media-plaza.png', title: 'Urban Development', type: 'image', date: '' },
+    { id: 'd4', src: '/media-water.png', title: 'Water Resources', type: 'image', date: '' },
+    { id: 'd5', src: '/media-tech-hub.png', title: 'Technology & Innovation', type: 'image', date: '' },
+    { id: 'd6', src: '/media-market.png', title: 'Commerce & Trade', type: 'image', date: '' },
+    { id: 'd7', src: '/media-housing.png', title: 'Affordable Housing', type: 'image', date: '' },
+    { id: 'd8', src: '/media-bridge.png', title: 'Public Works', type: 'image', date: '' },
+  ];
+
+  const displayMedia = [...randomPhotos];
+  if (displayMedia.length < 8) {
+    displayMedia.push(...defaultMedia.slice(displayMedia.length, 8));
+  }
   return (
     <main>
       {/* HERO SECTION */}
-      <section className={styles.hero}>
-        <div className="container">
-          <AnimatedView className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>
-              Delivering Public Projects With Transparency and Accountability
-            </h1>
-            <p className={styles.heroSubtitle}>
-              The Project Implementation Bureau monitors, coordinates, and reports on government-approved projects across Abia State to ensure effective delivery, quality standards, and public accountability.
-            </p>
-            <div className={styles.heroActions}>
-              <button className="btn btn-primary">
-                View Active Projects
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <Link href="/about" className="btn btn-outline" style={{ borderColor: '#FFF', color: '#FFF' }}>
-                About the Bureau
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            </div>
-          </AnimatedView>
-        </div>
-      </section>
+      {featuredPhotos.length > 0 ? (
+        <HeroSlider photos={featuredPhotos} />
+      ) : (
+        <section className={styles.hero}>
+          <div className="container">
+            <AnimatedView className={styles.heroContent}>
+              <h1 className={styles.heroTitle}>
+                Delivering public projects with Quality, transparency and accountability.
+              </h1>
+              <p className={styles.heroSubtitle}>
+                The Project Implementation Bureau monitors, coordinates, and reports on government-approved projects across Abia State to ensure effective delivery, quality standards, and public accountability.
+              </p>
+              <div className={styles.heroActions}>
+                <button className="btn btn-primary">
+                  View Active Projects
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <Link href="/about" className="btn btn-outline" style={{ borderColor: '#FFF', color: '#FFF' }}>
+                  About the Bureau
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </div>
+            </AnimatedView>
+          </div>
+        </section>
+      )}
 
       {/* IMPACT TRACKER */}
       <section className={statStyles.impact}>
         <div className="container">
           <AnimatedView className={statStyles.statsGrid}>
             <StatCounter value={150} suffix="+" label="Active Projects" />
-            <StatCounter value={31} label="LGAs Covered" />
-            <StatCounter value={2.1} prefix="₦" suffix="B" decimals={1} label="Total Investment" />
+            <StatCounter value={17} label="LGAs Covered" />
             <StatCounter value={89} suffix="%" label="On Track" color="#D72638" />
           </AnimatedView>
         </div>
@@ -215,8 +244,8 @@ export default function Home() {
             {/* Right: Image */}
             <AnimatedView delay={0.2} className={styles.mandateImage}>
               <img
-                src="/mandate-inspection.png"
-                alt="PIB Officials Inspecting Site"
+                src="/UBAKALA SMART SCHOOL conv 7.jpeg"
+                alt="Ubakala Smart School"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </AnimatedView>
@@ -235,48 +264,14 @@ export default function Home() {
           </AnimatedView>
 
           <AnimatedView delay={0.2} className={styles.mediaGrid}>
-            <div className={styles.mediaItem}>
-              <img src="/media-bridge.png" alt="Bridge Construction" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Infrastructure</span>
+            {displayMedia.map((item, index) => (
+              <div key={item.id || index} className={styles.mediaItem}>
+                <img src={item.src} alt={item.title} />
+                <div className={styles.mediaOverlay}>
+                  <span className={styles.mediaLabel}>{item.title}</span>
+                </div>
               </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-solar.png" alt="Solar Power Grid" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Renewable Energy</span>
-              </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-plaza.png" alt="Urban Plaza" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Urban Development</span>
-              </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-water.png" alt="Water Treatment" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Water Resources</span>
-              </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-tech-hub.png" alt="Tech Hub" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Technology & Innovation</span>
-              </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-market.png" alt="Modern Market" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Commerce & Trade</span>
-              </div>
-            </div>
-            <div className={styles.mediaItem}>
-              <img src="/media-housing.png" alt="Housing Estate" />
-              <div className={styles.mediaOverlay}>
-                <span className={styles.mediaLabel}>Affordable Housing</span>
-              </div>
-            </div>
+            ))}
           </AnimatedView>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
@@ -299,60 +294,38 @@ export default function Home() {
           </AnimatedView>
 
           <AnimatedView delay={0.2} className={styles.blogGrid}>
-            {/* Blog Post 1 */}
-            <div className={styles.blogCard}>
-              <div className={styles.blogImage}>
-                <img src="/blog-infrastructure.png" alt="Infrastructure Update" />
-              </div>
-              <div className={styles.blogContent}>
-                <span className={styles.blogDate}>October 24, 2025</span>
-                <h3 className={styles.blogTitle}>Accelerating Infrastructure Development Across Abia North</h3>
-                <p className={styles.blogExcerpt}>
-                  New highways and bridges are connecting rural communities to major economic hubs, reducing travel time significantly.
-                </p>
-                <span className={styles.readMore}>
-                  Read Article
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </span>
-              </div>
-            </div>
-
-            {/* Blog Post 2 */}
-            <div className={styles.blogCard}>
-              <div className={styles.blogImage}>
-                <img src="/blog-healthcare.png" alt="Healthcare Reform" />
-              </div>
-              <div className={styles.blogContent}>
-                <span className={styles.blogDate}>October 18, 2025</span>
-                <h3 className={styles.blogTitle}>Primary Healthcare Reform: Reaching the Grassroots</h3>
-                <p className={styles.blogExcerpt}>
-                  The renovation of primary health centers is ensuring that every citizen has access to quality medical care within their community.
-                </p>
-                <span className={styles.readMore}>
-                  Read Article
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </span>
-              </div>
-            </div>
-
-            {/* Blog Post 3 */}
-            <div className={styles.blogCard}>
-              <div className={styles.blogImage}>
-                {/* Reusing generated image for education since we hit limit */}
-                <img src="/aba-smart-school.png" alt="Education Technology" />
-              </div>
-              <div className={styles.blogContent}>
-                <span className={styles.blogDate}>October 10, 2025</span>
-                <h3 className={styles.blogTitle}>Digital Learning Initiative Launches in 50 Schools</h3>
-                <p className={styles.blogExcerpt}>
-                  Equipping the next generation with digital skills through the provision of smart devices and high-speed internet in schools.
-                </p>
-                <span className={styles.readMore}>
-                  Read Article
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </span>
-              </div>
-            </div>
+            {displayPosts.map((post) => (
+              <Link href={`/blog/${post.slug}`} key={post.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className={styles.blogCard}>
+                  <div className={styles.blogImage}>
+                    <img src={post.cover_url || '/blog-infrastructure.png'} alt={post.title} />
+                  </div>
+                  <div className={styles.blogContent}>
+                    <span className={styles.blogDate}>
+                      {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </span>
+                    <h3 className={styles.blogTitle}>{post.title}</h3>
+                    <p className={styles.blogExcerpt}>
+                      {post.excerpt || post.content.substring(0, 150) + '...'}
+                    </p>
+                    <span className={styles.readMore}>
+                      Read Article
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+            
+            {displayPosts.length === 0 && (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#64748B', padding: '2rem 0' }}>
+                No recent news articles at this time.
+              </p>
+            )}
           </AnimatedView>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>

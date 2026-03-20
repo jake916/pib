@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { submitFeedback } from '@/app/actions/feedback';
 import styles from './FeedbackModal.module.css';
 
 interface FeedbackModalProps {
@@ -54,51 +55,38 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Generate unique ID
-        const feedbackId = `FB-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-        // Get project name
         const selectedProject = projects.find(p => p.id === formData.project);
 
-        // Create feedback object
-        const feedback = {
-            id: feedbackId,
-            name: formData.name,
-            email: formData.email.toLowerCase(),
-            phone: formData.phone,
-            location: formData.location,
-            project: formData.project,
-            projectName: selectedProject?.name || '',
-            subject: formData.subject,
-            message: formData.message,
-            submittedAt: new Date().toISOString(),
-            status: 'pending' as const,
-            response: null,
-            respondedAt: null
-        };
+        try {
+            const result = await submitFeedback({
+                name: formData.name,
+                email: formData.email.toLowerCase(),
+                phone: formData.phone,
+                location: formData.location,
+                project: formData.project,
+                project_name: selectedProject?.name || '',
+                subject: formData.subject,
+                message: formData.message
+            });
 
-        // Save to localStorage
-        const existingFeedback = JSON.parse(localStorage.getItem('pib_feedback_submissions') || '[]');
-        existingFeedback.push(feedback);
-        localStorage.setItem('pib_feedback_submissions', JSON.stringify(existingFeedback));
+            // Reset form
+            setFormData({
+                project: '',
+                name: '',
+                email: '',
+                phone: '',
+                location: '',
+                subject: '',
+                message: ''
+            });
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Reset form
-        setFormData({
-            project: '',
-            name: '',
-            email: '',
-            phone: '',
-            location: '',
-            subject: '',
-            message: ''
-        });
-
-        setIsSubmitting(false);
-        alert(`Thank you for your feedback!\n\nReference ID: ${feedbackId}\n\nYou can track your feedback using your email or phone number on the Reports & Feedback page.`);
-        onClose();
+            setIsSubmitting(false);
+            alert(`Thank you for your feedback!\n\nReference ID: ${result.id}\n\nYou can track your feedback using your email or phone number on the Reports & Feedback page.`);
+            onClose();
+        } catch (error: any) {
+            setIsSubmitting(false);
+            alert(`Failed to submit feedback: ${error.message}`);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

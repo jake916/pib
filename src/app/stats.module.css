@@ -8,11 +8,11 @@
 
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     /* Removing gap to handle borders cleanly */
-    text-align: left;
-    /* Align text to the left as per design */
+    text-align: center;
+    /* Center align text */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -20,8 +20,8 @@
 .statItem {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    /* Left align items */
+    align-items: center;
+    /* Center align items */
     justify-content: center;
     padding: 0 2rem;
     border-right: 1px solid #E5E5E5;
@@ -40,7 +40,7 @@
 .impact :global(.stat-item) {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 0 2rem;
     border-right: 1px solid #E5E5E5;
 }

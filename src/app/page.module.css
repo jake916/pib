@@ -448,3 +448,96 @@
 .blogCard:hover .readMore {
   gap: 0.8rem;
 }
+
+/* Hero Slider */
+.heroSlider {
+  position: relative;
+  height: 100vh;
+  min-height: 500px;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--pib-black);
+  color: #FFFFFF;
+}
+
+.heroSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%),
+              linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 40%);
+  z-index: 2;
+}
+
+.heroBadge {
+  background-color: var(--pib-magenta);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.heroText {
+  font-size: 1.15rem;
+  color: #E2E8F0;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+.sliderDots {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.sliderDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.activeDot {
+  background: white;
+  transform: scale(1.1);
+  width: 24px;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .heroSlider {
+    height: 70vh;
+  }
+  .heroTitle {
+    font-size: 2.25rem;
+  }
+}

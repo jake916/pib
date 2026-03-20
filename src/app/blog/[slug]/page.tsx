@@ -2,20 +2,18 @@ import { notFound } from 'next/navigation';
 import styles from './article.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
-import { blogArticles } from '@/data/blogData';
 import ReactMarkdown from 'react-markdown';
+import { getPostBySlug } from '@/app/actions/blog';
 
-export async function generateStaticParams() {
-    return blogArticles.map((article) => ({
-        slug: article.slug,
-    }));
-}
+// In App Router, we export generateMetadata dynamically if desired, 
+// but for staticParams we'd need to fetch all slugs from Supabase.
+// Omitting generateStaticParams to let it be fully dynamic via SSR.
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const article = blogArticles.find((a) => a.slug === slug);
+    const article = await getPostBySlug(slug);
 
-    if (!article) {
+    if (!article || !article.published) {
         notFound();
     }
 
@@ -24,7 +22,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             {/* Article Hero */}
             <section className={styles.articleHero}>
                 <Image
-                    src={article.image}
+                    src={article.cover_url || '/placeholder-blog.jpg'}
                     alt={article.title}
                     fill
                     priority
@@ -51,15 +49,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                                     <line x1="8" y1="2" x2="8" y2="6" />
                                     <line x1="3" y1="10" x2="21" y2="10" />
                                 </svg>
-                                {article.date}
+                                {new Date(article.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </div>
-                            <div className={styles.metaItem}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12 6 12 12 16 14" />
-                                </svg>
-                                {article.readTime}
-                            </div>
+                            {article.read_time && (
+                                <div className={styles.metaItem}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    {article.read_time}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -81,11 +81,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                         <div className={styles.authorSection}>
                             <div className={styles.authorInfo}>
                                 <div className={styles.authorAvatar}>
-                                    {article.author.charAt(0)}
+                                    {article.author.charAt(0).toUpperCase()}
                                 </div>
                                 <div className={styles.authorDetails}>
                                     <h3>{article.author}</h3>
-                                    <p>Project Implementation Bureau Communications Team</p>
+                                    <p>Project Implementation Bureau</p>
                                 </div>
                             </div>
                         </div>

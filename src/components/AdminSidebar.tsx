@@ -9,11 +9,17 @@ import {
     Image as ImageIcon,
     FileText,
     MessageSquare,
-    LogOut
+    Users,
+    LogOut,
+    Mail
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+    userRole: string | null;
+}
+
+export default function AdminSidebar({ userRole }: AdminSidebarProps) {
     const pathname = usePathname();
 
     const menuItems = [
@@ -22,9 +28,23 @@ export default function AdminSidebar() {
         { label: 'Media', href: '/admin/media', icon: ImageIcon },
         { label: 'Blog', href: '/admin/blog', icon: FileText },
         { label: 'Feedbacks', href: '/admin/feedbacks', icon: MessageSquare },
+        { label: 'Contact Form', href: '/admin/contact', icon: Mail },
+        { label: 'Admins', href: '/admin/admins', icon: Users },
     ];
 
     const isActive = (href: string) => pathname === href;
+
+    const isVisible = (href: string) => {
+        if (!userRole || userRole === 'administrator') return true;
+        
+        if (href === '/admin/dashboard') return true;
+        if (href === '/admin/projects' && userRole === 'project_admin') return true;
+        if (href === '/admin/media' && userRole === 'media_admin') return true;
+        if (href === '/admin/blog' && userRole === 'blog_admin') return true;
+        if ((href === '/admin/feedbacks' || href === '/admin/contact') && userRole === 'customer_admin') return true;
+        
+        return false;
+    };
 
     return (
         <aside className={styles.sidebar}>
@@ -42,7 +62,7 @@ export default function AdminSidebar() {
             </div>
 
             <nav className={styles.nav}>
-                {menuItems.map((item) => {
+                {menuItems.filter(item => isVisible(item.href)).map((item) => {
                     const Icon = item.icon;
                     return (
                         <Link
@@ -58,10 +78,16 @@ export default function AdminSidebar() {
             </nav>
 
             <div className={styles.footer}>
-                <Link href="/" className={styles.logoutBtn}>
+                <button
+                    onClick={async () => {
+                        await fetch('/api/auth/logout', { method: 'POST' });
+                        window.location.href = '/admin/login';
+                    }}
+                    className={styles.logoutBtn}
+                >
                     <LogOut size={18} />
                     <span>Sign Out</span>
-                </Link>
+                </button>
             </div>
         </aside>
     );

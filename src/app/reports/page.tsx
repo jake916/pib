@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
+import { getFeedbacksByContact } from '@/app/actions/feedback';
 import styles from './reports.module.css';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -40,31 +41,33 @@ function ReportsContent() {
         }
     }, [searchParams]);
 
-    const performSearch = (searchTerm: string) => {
+    const [isSearching, setIsSearching] = useState(false);
+
+    const performSearch = async (searchTerm: string) => {
         if (!searchTerm.trim()) return;
 
-        // Get all feedback from localStorage
-        const allFeedback: Feedback[] = JSON.parse(localStorage.getItem('pib_feedback_submissions') || '[]');
+        try {
+            setIsSearching(true);
+            // Call the database function
+            const data = await getFeedbacksByContact(searchTerm);
+            
+            // Map snake_case from DB into the local camelCase format
+            const mappedResults = data.map(item => ({
+                ...item,
+                projectName: item.project_name,
+                submittedAt: item.created_at,
+                respondedAt: item.responded_at
+            }));
 
-        // Detect if input is email or phone
-        const isEmail = searchTerm.includes('@');
-        const term = searchTerm.toLowerCase().trim();
-
-        // Filter feedback
-        const results = allFeedback.filter(feedback => {
-            if (isEmail) {
-                return feedback.email.toLowerCase() === term;
-            } else {
-                // Remove all non-digits for phone comparison
-                const inputPhone = term.replace(/\D/g, '');
-                const feedbackPhone = feedback.phone.replace(/\D/g, '');
-                return feedbackPhone === inputPhone;
-            }
-        });
-
-        setFeedbackList(results);
-        setHasSearched(true);
-        setActiveFilter('all');
+            setFeedbackList(mappedResults as unknown as Feedback[]);
+            setHasSearched(true);
+            setActiveFilter('all');
+        } catch (error: any) {
+            console.error('Search failed:', error);
+            alert(error.message || 'Failed to search feedbacks. Please try again.');
+        } finally {
+            setIsSearching(false);
+        }
     };
 
     const handleSearch = (e: React.FormEvent) => {
@@ -126,12 +129,14 @@ function ReportsContent() {
                                 className={styles.searchInput}
                                 required
                             />
-                            <button type="submit" className="btn btn-primary">
-                                Search Feedback
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.35-4.35"></path>
-                                </svg>
+                            <button type="submit" className="btn btn-primary" disabled={isSearching}>
+                                {isSearching ? 'Searching...' : 'Search Feedback'}
+                                {!isSearching && (
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.35-4.35"></path>
+                                    </svg>
+                                )}
                             </button>
                         </div>
                         <p className={styles.searchHint}>

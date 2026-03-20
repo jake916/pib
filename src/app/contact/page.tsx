@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import styles from './contact.module.css';
+import { submitMessage } from '@/app/actions/contact';
+import { toast } from 'sonner';
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -25,20 +27,28 @@ export default function ContactPage() {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            await submitMessage({
+                name: formData.name,
+                email: formData.email,
+                subject: formData.subject,
+                message: `Phone: ${formData.phone}\n\n${formData.message}`
+            });
 
-        // Reset form
-        setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            subject: '',
-            message: ''
-        });
-
-        setIsSubmitting(false);
-        alert('Thank you for contacting us! We will get back to you shortly.');
+            // Reset form
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                subject: '',
+                message: ''
+            });
+            toast.success('Thank you for contacting us! We will get back to you shortly.');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to send message. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

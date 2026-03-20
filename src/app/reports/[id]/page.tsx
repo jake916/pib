@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getFeedbackById } from '@/app/actions/feedback';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './feedback-detail.module.css';
@@ -28,16 +29,28 @@ export default function FeedbackDetailPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const feedbackId = params.id as string;
+        const fetchFeedback = async () => {
+            try {
+                const feedbackId = params.id as string;
+                const data = await getFeedbackById(feedbackId);
+                
+                const mappedData = {
+                    ...data,
+                    projectName: data.project_name,
+                    submittedAt: data.created_at,
+                    respondedAt: data.responded_at
+                };
+                
+                setFeedback(mappedData as unknown as Feedback);
+            } catch (error) {
+                console.error(error);
+                setFeedback(null);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        // Get all feedback from localStorage
-        const allFeedback: Feedback[] = JSON.parse(localStorage.getItem('pib_feedback_submissions') || '[]');
-
-        // Find the specific feedback
-        const foundFeedback = allFeedback.find(f => f.id === feedbackId);
-
-        setFeedback(foundFeedback || null);
-        setLoading(false);
+        fetchFeedback();
     }, [params.id]);
 
     const getStatusBadge = (status: string) => {

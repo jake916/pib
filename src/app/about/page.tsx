@@ -66,8 +66,8 @@ export default function AboutPage() {
                         </AnimatedView>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
                             <Image
-                                src="/about_overview_new_1770455353653.png"
-                                alt="PIB Collaboration"
+                                src="/3.jpg"
+                                alt="PIB Overview"
                                 fill
                                 style={{ objectFit: 'cover' }}
                             />
@@ -82,7 +82,7 @@ export default function AboutPage() {
                     <div className={styles.splitSectionReversed}>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
                             <Image
-                                src="/mandate_inspection_1770377294088.png"
+                                src="/WhatsApp Image 2026-02-17 at 8.38.43 PM (12).jpeg"
                                 alt="Inspection Mandate"
                                 fill
                                 style={{ objectFit: 'cover' }}

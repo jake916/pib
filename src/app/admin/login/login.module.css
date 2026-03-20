@@ -51,6 +51,7 @@
 }
 
 .input {
+    width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e1e1e1;
     border-radius: 8px;
@@ -93,4 +94,66 @@
 
 .backLink:hover {
     text-decoration: underline;
+}
+
+.passwordWrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.passwordInput {
+    width: 100%;
+    padding-right: 3rem !important;
+}
+
+.toggleButton {
+    position: absolute;
+    right: 0.75rem;
+    height: 100%;
+    background: none;
+    border: none;
+    padding: 0 0.5rem;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    z-index: 1;
+}
+
+.toggleButton:hover {
+    color: #333;
+}
+
+.forgotPasswordWrapper {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.forgotPasswordLink {
+    font-size: 0.85rem;
+    color: #0070f3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgotPasswordLink:hover {
+    color: #0051af;
+    text-decoration: underline;
+}
+
+.successMessage {
+    padding: 1rem;
+    background-color: #e6f7ef;
+    border: 1px solid #b7ebcf;
+    border-radius: 8px;
+    color: #1a7f4e;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
 }
