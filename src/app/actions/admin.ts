@@ -199,10 +199,20 @@ export async function deleteAdmin(id: string) {
 
     const adminSupabase = getAdminSupabaseClient();
     
-    // Deleting from Auth will cascade to admin_roles if foreign keys are set properly
+    // 1. Delete from admin_roles first to handle foreign key constraints
+    // This allows the user to be deleted from Auth without conflict
+    const { error: dbError } = await adminSupabase
+        .from('admin_roles')
+        .delete()
+        .eq('id', id);
+        
+    if (dbError) throw new Error(`Database Error: ${dbError.message}`);
+    
+    // 2. Delete from Auth (this will now succeed)
     const { error: authError } = await adminSupabase.auth.admin.deleteUser(id);
     
-    if (authError) throw new Error(authError.message);
+    if (authError) throw new Error(`Auth Error: ${authError.message}`);
+
     revalidatePath('/admin/admins');
 }
 
