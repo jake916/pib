@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Reply, Trash2, Loader2, MessageSquareText, Search } from 'lucide-react';
+import { Reply, Trash2, Loader2, MessageSquareText, Search, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { getAllFeedbacks, replyToFeedback, deleteFeedback, Feedback } from '@/app/actions/feedback';
 import { toast } from 'sonner';
+import MediaLightbox from '@/components/MediaLightbox';
 
 export default function AdminFeedbacksPage() {
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
@@ -15,6 +16,7 @@ export default function AdminFeedbacksPage() {
     
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedImage, setSelectedImage] = useState<{ url: string, alt: string } | null>(null);
 
     const loadFeedbacks = async () => {
         try {
@@ -42,7 +44,6 @@ export default function AdminFeedbacksPage() {
             setIsSubmittingReply(true);
             await replyToFeedback(id, replyText);
             
-            // Optimistic UI Update
             setFeedbacks(prev => prev.map(f => f.id === id ? { 
                 ...f, 
                 status: 'replied', 
@@ -108,8 +109,6 @@ export default function AdminFeedbacksPage() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={{ width: '100%', padding: '0.5rem 0.75rem 0.5rem 2.25rem', border: '1px solid #E2E8F0', borderRadius: '0.375rem', fontSize: '0.875rem', outline: 'none' }}
-                        onFocus={(e) => e.target.style.borderColor = '#3B82F6'}
-                        onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
                     />
                 </div>
             </div>
@@ -166,7 +165,7 @@ export default function AdminFeedbacksPage() {
                                         <span>{formatDate(f.created_at)}</span>
                                     </div>
                                     <div style={{ display: 'inline-block', marginTop: '0.5rem', padding: '0.25rem 0.5rem', backgroundColor: '#F1F5F9', borderRadius: '0.25rem', fontSize: '0.75rem', color: '#475569', fontWeight: 500 }}>
-                                        Project: {f.project_name} <span style={{ opacity: 0.5, marginLeft: '0.25rem' }}>(ID: {f.id.substring(0, 13)}...)</span>
+                                        Project: {f.project_name}
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -189,11 +188,26 @@ export default function AdminFeedbacksPage() {
                                 </div>
                             </div>
                             
-                            <div style={{ borderLeft: '2px solid #E2E8F0', paddingLeft: '1rem', color: '#334155', fontSize: '0.9375rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
-                                {f.message}
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                                <div style={{ flex: 1, borderLeft: '2px solid #E2E8F0', paddingLeft: '1rem', color: '#334155', fontSize: '0.9375rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                                    {f.message}
+                                </div>
+                                
+                                {f.image_url && (
+                                    <div style={{ width: '150px', flexShrink: 0 }}>
+                                        <div 
+                                            onClick={() => setSelectedImage({ url: f.image_url!, alt: `Evidence for ${f.subject}` })}
+                                            style={{ display: 'block', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #E2E8F0', cursor: 'pointer' }}
+                                        >
+                                            <img src={f.image_url} alt="Evidence" style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
+                                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0.25rem', backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', fontSize: '0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                                                <ImageIcon size={10} /> View Evidence
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             
-                            {/* Reply Input Area */}
                             {replyingTo === f.id && (
                                 <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: '#F8FAFC', borderRadius: '0.5rem', border: '1px solid #E2E8F0' }}>
                                     <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1E293B', margin: '0 0 0.5rem 0' }}>Write Reply</h4>
@@ -216,7 +230,7 @@ export default function AdminFeedbacksPage() {
                                         <button 
                                             onClick={() => handleReply(f.id)}
                                             disabled={isSubmittingReply || !replyText.trim()}
-                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', border: 'none', borderRadius: '0.375rem', backgroundColor: '#3B82F6', color: 'white', fontSize: '0.875rem', cursor: isSubmittingReply || !replyText.trim() ? 'not-allowed' : 'pointer', fontWeight: 500, opacity: (!replyText.trim() || isSubmittingReply) ? 0.7 : 1 }}
+                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.5rem 1rem', border: 'none', borderRadius: '0.375rem', backgroundColor: '#3B82F6', color: 'white', fontSize: '0.875rem', cursor: isSubmittingReply || !replyText.trim() ? 'not-allowed' : 'pointer', fontWeight: 500 }}
                                         >
                                             {isSubmittingReply ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Reply size={16} />}
                                             Send Response
@@ -225,7 +239,6 @@ export default function AdminFeedbacksPage() {
                                 </div>
                             )}
 
-                            {/* Existing Reply */}
                             {f.status === 'replied' && f.response && (
                                 <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: '#F0FDF4', borderRadius: '0.5rem', border: '1px solid #BBF7D0' }}>
                                     <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#166534', margin: '0 0 0.25rem 0' }}>PIB Official Response</h4>
@@ -238,6 +251,14 @@ export default function AdminFeedbacksPage() {
                         </div>
                     ))}
                 </div>
+            )}
+
+            {selectedImage && (
+                <MediaLightbox 
+                    imageSrc={selectedImage.url}
+                    imageAlt={selectedImage.alt}
+                    onClose={() => setSelectedImage(null)}
+                />
             )}
         </div>
     );

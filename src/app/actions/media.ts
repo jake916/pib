@@ -144,11 +144,40 @@ export async function getMediaItems(): Promise<MediaItem[]> {
         date: new Date(v.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
     }))
 
+    // Add virtual album for featured photos
+    const featuredPhotos = await getFeaturedPhotos();
+    if (featuredPhotos.length > 0) {
+        albums.unshift({
+            id: 'hero-section',
+            type: 'album',
+            title: 'Hero Section Photos',
+            cover: featuredPhotos[0].url,
+            count: featuredPhotos.length,
+            date: 'Featured'
+        });
+    }
+
     // Sort combined by date
-    return [...albums, ...videos].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    return [...albums, ...videos].sort((a, b) => {
+        // Keep virtual album at the top if it exists
+        if (a.id === 'hero-section') return -1;
+        if (b.id === 'hero-section') return 1;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    })
 }
 
 export async function getAlbum(id: string) {
+    if (id === 'hero-section') {
+        const photos = await getFeaturedPhotos();
+        return {
+            id: 'hero-section',
+            title: 'Hero Section Photos',
+            cover_url: photos[0]?.url || '',
+            created_at: new Date().toISOString(),
+            photos
+        }
+    }
+
     const supabase = await createClient()
     const { data, error } = await supabase
         .from('albums')
@@ -294,7 +323,10 @@ export async function getRandomPhotos(limit: number): Promise<PublicMediaItem[]>
 
     const { data: photos, error } = await supabase.from('photos').select('*')
 
-    if (error) throw new Error(error.message)
+    if (error) {
+        console.error('Error fetching random photos:', error);
+        return [];
+    }
 
     // Shuffle and pick
     const shuffled = (photos || [])

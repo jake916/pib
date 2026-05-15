@@ -9,8 +9,8 @@ import HeroSlider from "@/components/HeroSlider";
 
 export default async function Home() {
   const [randomPhotos, featuredPhotos, recentPostsRaw] = await Promise.all([
-    getRandomPhotos(8),
-    getFeaturedPhotos(),
+    getRandomPhotos(8).catch(() => []),
+    getFeaturedPhotos().catch(() => []),
     getPosts({ publishedOnly: true }).catch(() => [])
   ]);
 

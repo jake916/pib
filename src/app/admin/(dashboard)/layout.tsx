@@ -1,6 +1,6 @@
 import AdminSidebar from "@/components/AdminSidebar";
-import { Toaster } from 'sonner';
 import { getCurrentAdminRole } from "@/app/actions/admin";
+import { redirect } from "next/navigation";
 
 export default async function AdminDashboardLayout({
     children,
@@ -9,13 +9,16 @@ export default async function AdminDashboardLayout({
 }) {
     const role = await getCurrentAdminRole();
     
+    if (role === 'government_admin') {
+        redirect('/government-admin/dashboard');
+    }
+    
     return (
         <div style={{ display: 'flex' }}>
             <AdminSidebar userRole={role} />
             <main style={{ flex: 1, marginLeft: '250px', padding: '2rem', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
                 {children}
             </main>
-            <Toaster position="top-right" />
         </div>
     );
 }

@@ -143,10 +143,12 @@ export default function AlbumDetailsPage() {
                     </div>
                 </div>
                 <div className={styles.headerActions}>
-                    <button className={styles.addButton} onClick={() => setIsAddImageOpen(true)}>
-                        <Plus size={18} />
-                        Add Photos
-                    </button>
+                    {id !== 'hero-section' && (
+                        <button className={styles.addButton} onClick={() => setIsAddImageOpen(true)}>
+                            <Plus size={18} />
+                            Add Photos
+                        </button>
+                    )}
                 </div>
             </div>
 

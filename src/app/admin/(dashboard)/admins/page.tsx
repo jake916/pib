@@ -187,6 +187,7 @@ export default function AdminsPage() {
                                             <option value="media_admin">Media Admin</option>
                                             <option value="blog_admin">Blog Admin</option>
                                             <option value="customer_admin">Customer Admin</option>
+                                            <option value="government_admin">Government Admin</option>
                                         </select>
                                     </td>
                                     <td style={{ padding: '1rem', color: '#64748B', fontSize: '0.875rem' }}>
@@ -253,6 +254,7 @@ export default function AdminsPage() {
                                         <option value="media_admin">Media Admin</option>
                                         <option value="blog_admin">Blog Admin</option>
                                         <option value="customer_admin">Customer Admin</option>
+                                        <option value="government_admin">Government Admin</option>
                                     </select>
                                 </div>
                                 <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>

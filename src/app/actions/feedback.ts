@@ -14,6 +14,7 @@ export type Feedback = {
     project_name: string
     subject: string
     message: string
+    image_url?: string | null
     status: 'pending' | 'replied'
     response: string | null
     responded_at: string | null
@@ -29,6 +30,7 @@ export async function submitFeedback(data: {
     project_name: string
     subject: string
     message: string
+    image_url?: string | null
 }) {
     const supabase = await createClient()
 
@@ -43,6 +45,7 @@ export async function submitFeedback(data: {
             project_name: data.project_name,
             subject: data.subject,
             message: data.message,
+            image_url: data.image_url || null,
             status: 'pending'
         }])
         .select()
@@ -68,7 +71,6 @@ export async function getFeedbacksByContact(contactInfo: string) {
     if (isEmail) {
         query = query.ilike('email', contactInfo.trim())
     } else {
-        // Simple numeric extraction to match the user's phone search behavior
         query = query.like('phone', `%${contactInfo.replace(/\D/g, '')}%`)
     }
 

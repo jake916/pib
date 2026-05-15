@@ -12,6 +12,11 @@ export async function getDashboardStats() {
     let blogCount = 0, feedbackCount = 0, photoCount = 0, videoCount = 0, albumCount = 0;
     
     // 1. Fetch counts based on role
+    let projectCount = 0;
+    if (role === 'administrator' || role === 'project_admin') {
+        const { count } = await supabase.from('projects').select('*', { count: 'exact', head: true });
+        projectCount = count || 0;
+    }
     if (role === 'administrator' || role === 'blog_admin') {
         const { count } = await supabase.from('blog_posts').select('*', { count: 'exact', head: true });
         blogCount = count || 0;
@@ -33,6 +38,18 @@ export async function getDashboardStats() {
 
     // 2. Fetch recent items based on role
     let activityList: any[] = [];
+
+    if (role === 'administrator' || role === 'project_admin') {
+        const { data: recentProjects } = await supabase.from('projects').select('id, title, created_at').order('created_at', { ascending: false }).limit(3);
+        if (recentProjects) {
+            activityList.push(...recentProjects.map(p => ({
+                id: `proj-${p.id}`,
+                title: `Project "${p.title}" added`,
+                time: p.created_at,
+                type: 'project'
+            })));
+        }
+    }
 
     if (role === 'administrator' || role === 'blog_admin') {
         const { data: recentBlogs } = await supabase.from('blog_posts').select('id, title, created_at').order('created_at', { ascending: false }).limit(3);
@@ -90,18 +107,18 @@ export async function getDashboardStats() {
 
     // Mock day data for charts until we aggregate grouping properly
     const activityData = [
-        { name: 'Mon', projects: 0, feedbacks: 2 },
-        { name: 'Tue', projects: 0, feedbacks: 5 },
-        { name: 'Wed', projects: 0, feedbacks: Math.floor((feedbackCount || 0) * 0.3) },
-        { name: 'Thu', projects: 0, feedbacks: Math.floor((feedbackCount || 0) * 0.2) },
-        { name: 'Fri', projects: 0, feedbacks: Math.floor((feedbackCount || 0) * 0.4) },
+        { name: 'Mon', projects: Math.floor(projectCount * 0.1), feedbacks: 2 },
+        { name: 'Tue', projects: Math.floor(projectCount * 0.2), feedbacks: 5 },
+        { name: 'Wed', projects: Math.floor(projectCount * 0.3), feedbacks: Math.floor((feedbackCount || 0) * 0.3) },
+        { name: 'Thu', projects: Math.floor(projectCount * 0.2), feedbacks: Math.floor((feedbackCount || 0) * 0.2) },
+        { name: 'Fri', projects: Math.floor(projectCount * 0.1), feedbacks: Math.floor((feedbackCount || 0) * 0.4) },
         { name: 'Sat', projects: 0, feedbacks: 3 },
         { name: 'Sun', projects: 0, feedbacks: 1 },
     ];
     
-    const maxVal = Math.max(blogCount || 0, mediaCount, feedbackCount || 0, 1);
+    const maxVal = Math.max(blogCount || 0, mediaCount, feedbackCount || 0, projectCount || 0, 1);
     const distributionData: any[] = [];
-    if (role === 'administrator' || role === 'project_admin') distributionData.push({ name: 'Projects', value: 0, color: '#4F46E5' });
+    if (role === 'administrator' || role === 'project_admin') distributionData.push({ name: 'Projects', value: (projectCount / maxVal) * 100 || 5, color: '#4F46E5' });
     if (role === 'administrator' || role === 'media_admin') distributionData.push({ name: 'Media', value: (mediaCount / maxVal) * 100 || 5, color: '#059669' });
     if (role === 'administrator' || role === 'blog_admin') distributionData.push({ name: 'Blog', value: ((blogCount || 0) / maxVal) * 100 || 5, color: '#EA580C' });
     if (role === 'administrator' || role === 'customer_admin') distributionData.push({ name: 'Feedback', value: ((feedbackCount || 0) / maxVal) * 100 || 5, color: '#DC2626' });
@@ -109,7 +126,7 @@ export async function getDashboardStats() {
     return {
         role,
         counts: {
-            projects: 0,
+            projects: projectCount,
             media: mediaCount,
             blog: blogCount || 0,
             feedback: feedbackCount || 0

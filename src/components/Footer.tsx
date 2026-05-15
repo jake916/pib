@@ -6,27 +6,33 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 import FeedbackModal from './FeedbackModal';
 
-export default function Footer() {
+interface FooterProps {
+    showFeedback?: boolean;
+}
+
+export default function Footer({ showFeedback = true }: FooterProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <footer className={styles.footer}>
             {/* Pre-Footer: Feedback */}
-            <div className={styles.preFooter}>
-                <div className="container">
-                    <div className={styles.preFooterContent}>
-                        <h2 className={styles.preFooterTitle}>Report an Issue or Share Feedback</h2>
-                        <p className={styles.preFooterText}>
-                            The Project Implementation Bureau welcomes feedback related to projects listed on this platform.
-                            If you have information about a project, concerns regarding implementation, or general feedback,
-                            please submit the form below. All submissions are reviewed and handled in line with internal processes.
-                        </p>
-                        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
-                            Submit Feedback
-                        </button>
+            {showFeedback && (
+                <div className={styles.preFooter}>
+                    <div className="container">
+                        <div className={styles.preFooterContent}>
+                            <h2 className={styles.preFooterTitle}>Report an Issue or Share Feedback</h2>
+                            <p className={styles.preFooterText}>
+                                The Project Implementation Bureau welcomes feedback related to projects listed on this platform.
+                                If you have information about a project, concerns regarding implementation, or general feedback,
+                                please submit the form below. All submissions are reviewed and handled in line with internal processes.
+                            </p>
+                            <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+                                Submit Feedback
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Main Footer */}
             <div className={styles.mainFooter}>

@@ -38,7 +38,7 @@ export default function Header() {
 
     const navItems = [
         { label: 'Home', href: '/' },
-        { label: 'Projects', href: '#projects' },
+        { label: 'Projects', href: '/projects' },
         { label: 'About PIB', href: '/about' },
         { label: 'Media', href: '/media' },
         { label: 'Blog', href: '/blog' },
@@ -104,12 +104,7 @@ export default function Header() {
 
                 {/* RIGHT: Actions & Mobile Toggle */}
                 <div className={styles.actions}>
-                    <Link href="/admin/login" className={`btn btn-primary ${styles.ctaLink}`} style={{ padding: '0.6rem 1.5rem', fontSize: '0.85rem' }}>
-                        Login to portal
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </Link>
+
 
                     {/* Mobile Hamburger */}
                     <button className={`${styles.hamburger} ${isMobileMenuOpen ? styles.hamburgerActive : ''}`} onClick={toggleMenu}>
@@ -163,15 +158,7 @@ export default function Header() {
                         </div>
                     ))}
 
-                    {/* Mobile Login Button */}
-                    <div style={{ marginTop: '2rem' }}>
-                        <Link href="/admin/login" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                            Login to portal
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </Link>
-                    </div>
+
                 </nav>
             </div>
         </motion.header>

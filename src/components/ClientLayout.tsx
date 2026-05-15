@@ -13,7 +13,7 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
     // Check if we are on the admin login page or any admin page
-    const isAdminPage = pathname?.startsWith('/admin');
+    const isAdminPage = pathname?.startsWith('/admin') || pathname?.startsWith('/government-admin');
 
     return (
         <>
