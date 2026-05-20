@@ -12,10 +12,10 @@ interface Props {
 const AbiaMap: React.FC<Props> = ({ geoData, onLgaSelect, selectedLga }) => {
     // Bounds from previous check
     const bounds = {
-        minX: 6.886972904205322,
-        maxX: 7.96204519271862,
-        minY: 4.990295886993465,
-        maxY: 5.869999885559082
+        minX: 7.140429020000055,
+        maxX: 7.987501144000021,
+        minY: 4.821804522999587,
+        maxY: 6.042149543999533
     };
 
     const width = 800;
@@ -44,7 +44,7 @@ const AbiaMap: React.FC<Props> = ({ geoData, onLgaSelect, selectedLga }) => {
 
     const mapFeatures = useMemo(() => {
         return geoData.features.map((feature: any, index: number) => {
-            const lgaName = feature.properties.lga;
+            const lgaName = feature.properties.LGAName;
             const coords = feature.geometry.coordinates;
             const type = feature.geometry.type;
             

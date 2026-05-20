@@ -5,22 +5,10 @@ import Image from 'next/image';
 export default function AboutPage() {
     const leaders = [
         {
-            name: "Dr. Ngozi Okonjo",
-            role: "Director General",
-            bio: "Over 20 years of experience in public administration and infrastructure development.",
-            image: "/leader_ngozi_1770455369602.png"
-        },
-        {
-            name: "Engr. Chinedu Kalu",
-            role: "Head of Operations",
-            bio: "Civil engineer specializing in sustainable urban planning and construction management.",
-            image: "/leader_chinedu_1770455384985.png"
-        },
-        {
-            name: "Mrs. Amaka Uche",
-            role: "Head of Monitoring",
-            bio: "Expert in project evaluation, data analytics, and performance tracking.",
-            image: "/leader_amaka_1770455399271.png"
+            name: "His Excellency, Dr. Alex Otti",
+            role: "Executive Governor, Abia State",
+            bio: "Committed to delivering transparent, cost-efficient, and top-quality government projects to improve the lives of citizens.",
+            image: "/Governor Alex Otti 2 (1).jpeg"
         }
     ];
 
@@ -55,13 +43,13 @@ export default function AboutPage() {
                         <AnimatedView delay={0.2} className={styles.contentContainer}>
                             <h2 className={styles.sectionTitle}>Overview</h2>
                             <p className={styles.overviewText}>
-                                The Project Implementation Bureau was established to strengthen the coordination, monitoring, and delivery of government projects across Abia State.
+                                The PIB was established to ensure maximum value, quality standard, adherence to schedule and budget on Projects with significant budget implications across Abia State. 
                             </p>
                             <p className={styles.overviewText}>
-                                The Bureau serves as a central oversight body, ensuring that approved projects are implemented efficiently, tracked consistently, and reported accurately in line with government priorities and established standards.
+                                It aligns with the Abia State Government’s commitment to ensure that public resources are applied judiciously and value for money review.
                             </p>
                             <p className={styles.overviewText}>
-                                Through structured monitoring and data-driven reporting, the Bureau supports improved project outcomes and enhances transparency in public infrastructure and service delivery.
+                                The PIB serves as a Design Assurance Gate, ensuring preliminary investigation, multi-disciplinary review, adherence to structural code, material testing, before site mobilization and during the execution of projects.
                             </p>
                         </AnimatedView>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
@@ -89,14 +77,10 @@ export default function AboutPage() {
                             />
                         </AnimatedView>
                         <AnimatedView delay={0.2} className={styles.contentContainer}>
-                            <h2 className={styles.sectionTitle}>Our Mandate</h2>
-                            <ul className={styles.list}>
-                                <li className={styles.listItem}>Monitoring the implementation of government-approved projects</li>
-                                <li className={styles.listItem}>Tracking project progress, timelines, and completion status</li>
-                                <li className={styles.listItem}>Supporting accountability through structured reporting</li>
-                                <li className={styles.listItem}>Coordinating with implementing agencies and stakeholders</li>
-                                <li className={styles.listItem}>Providing verified project information to government and the public</li>
-                            </ul>
+                            <h2 className={styles.sectionTitle}>Our Mission</h2>
+                            <div className={styles.visionText}>
+                                To ensure cost efficient and top-quality implementation of government projects that improve the lives of citizens.
+                            </div>
                         </AnimatedView>
                     </div>
                 </div>
@@ -109,7 +93,7 @@ export default function AboutPage() {
                         <AnimatedView delay={0.2} className={styles.contentContainer}>
                             <h2 className={styles.sectionTitle}>Our Vision</h2>
                             <div className={styles.visionText}>
-                                "To ensure that public projects across Abia State are delivered efficiently, transparently, and in the best interest of citizens."
+                                To be a model government agency recognized for excellence in quality, accountability, and citizen-centered service delivery, upholding zero tolerance for substandard performance on project.
                             </div>
                         </AnimatedView>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
@@ -127,7 +111,7 @@ export default function AboutPage() {
             {/* Full Width Impact Image */}
             <section className={styles.fullWidthImageSection}>
                 <Image
-                    src="/abia_state_landscape_1770455748660.png"
+                    src="/PIB PICS (1).jpeg"
                     alt="Abia State Landscape"
                     fill
                     style={{ objectFit: 'cover' }}

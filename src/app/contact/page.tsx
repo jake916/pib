@@ -96,7 +96,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className={styles.infoContent}>
                                     <h3>Email</h3>
-                                    <p><a href="mailto:info@abiapib.gov.ng">info@abiapib.gov.ng</a></p>
+                                    <p><a href="mailto:pib@abiastate.gov.ng">pib@abiastate.gov.ng</a></p>
                                 </div>
                             </div>
 
@@ -108,7 +108,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className={styles.infoContent}>
                                     <h3>Phone</h3>
-                                    <p><a href="tel:+2348012345678">+234 801 234 5678</a></p>
+                                    <p><a href="tel:08146184900">08146184900</a></p>
                                 </div>
                             </div>
 

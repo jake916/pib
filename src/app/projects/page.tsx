@@ -50,7 +50,7 @@ export default function ProjectsPage() {
 
     const lgaList = useMemo(() => {
         if (!geoData) return [];
-        return geoData.features.map((f: any) => f.properties.lga).sort();
+        return geoData.features.map((f: any) => f.properties.LGAName).sort();
     }, [geoData]);
 
     const filteredProjects = useMemo(() => {

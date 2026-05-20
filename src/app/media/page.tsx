@@ -35,6 +35,7 @@ export default function MediaPage() {
     }, []);
 
     const filteredMedia = mediaItems.filter(item => {
+        if (item.id === 'hero-section') return false;
         if (activeFilter === 'all') return true;
         if (activeFilter === 'albums') return item.type === 'album';
         if (activeFilter === 'videos') return item.type === 'video';

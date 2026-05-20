@@ -5,16 +5,19 @@ import StatCounter from "@/components/StatCounter";
 import Link from "next/link";
 import { getRandomPhotos, getFeaturedPhotos } from "./actions/media";
 import { getPosts } from "@/app/actions/blog";
+import { getProjects } from "@/app/actions/projects";
 import HeroSlider from "@/components/HeroSlider";
 
 export default async function Home() {
-  const [randomPhotos, featuredPhotos, recentPostsRaw] = await Promise.all([
+  const [randomPhotos, featuredPhotos, recentPostsRaw, allProjects] = await Promise.all([
     getRandomPhotos(8).catch(() => []),
     getFeaturedPhotos().catch(() => []),
-    getPosts({ publishedOnly: true }).catch(() => [])
+    getPosts({ publishedOnly: true }).catch(() => []),
+    getProjects().catch(() => [])
   ]);
 
   const displayPosts = recentPostsRaw.slice(0, 3);
+  const displayProjects = allProjects.slice(0, 3);
 
   const defaultMedia: any[] = [
     { id: 'd1', src: '/media-bridge.png', title: 'Infrastructure', type: 'image', date: '' },
@@ -69,7 +72,7 @@ export default async function Home() {
       <section className={statStyles.impact}>
         <div className="container">
           <AnimatedView className={statStyles.statsGrid}>
-            <StatCounter value={150} suffix="+" label="Active Projects" />
+            <StatCounter value={300} suffix="+" label="Active Projects" />
             <StatCounter value={17} label="LGAs Covered" />
             <StatCounter value={89} suffix="%" label="On Track" color="#D72638" />
           </AnimatedView>
@@ -87,128 +90,57 @@ export default async function Home() {
           </AnimatedView>
 
           <div className={styles.projectGrid}>
-            {/* Project Card 1 */}
-            <AnimatedView delay={0.1} className={styles.projectCard}>
-              <div className={styles.cardHeader}>
-                <span className={`${styles.cardTag} ${styles.cardTagActive}`}>Active Construction</span>
-                <span className={styles.cardYear}>2025</span>
-              </div>
+            {displayProjects.map((project, index) => (
+              <AnimatedView key={project.id} delay={0.1 * (index + 1)} className={styles.projectCard}>
+                <div className={styles.cardHeader}>
+                  <span className={`${styles.cardTag} ${project.status === 'Ongoing' ? styles.cardTagActive : ''}`}>
+                    {project.status}
+                  </span>
+                  <span className={styles.cardYear}>
+                    {new Date(project.start_date).getFullYear()}
+                  </span>
+                </div>
 
-              <h3 className={styles.projectTitle}>Aba Smart School Initiative</h3>
-              <p className={styles.projectDesc}>
-                Comprehensive infrastructure upgrade and renovation project to transform Aba schools into modern centers of excellence with digital learning facilities.
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <p className={styles.projectDesc}>
+                  {project.description}
+                </p>
+
+                <div className={styles.metaGrid}>
+                  <div className={styles.metaItem}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    {project.lga}, Abia State
+                  </div>
+                  <div className={styles.metaItem}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    {new Date(project.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                </div>
+
+                <Link href={`/projects`} className={styles.trackLink}>
+                  View details
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </Link>
+
+                <div className={styles.cardImageContainer}>
+                  <img src={project.images?.[0] || '/project-placeholder.png'} alt={project.title} />
+                </div>
+              </AnimatedView>
+            ))}
+            
+            {displayProjects.length === 0 && (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#64748B', padding: '2rem 0' }}>
+                No active projects to display at this time.
               </p>
-
-              <div className={styles.metaGrid}>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  Osisioma Ngwa, Abia State
-                </div>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  Dec 8, 2025
-                </div>
-              </div>
-
-              <a href="#" className={styles.trackLink}>
-                Track progress
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
-
-              <div className={styles.cardImageContainer}>
-                <img src="/aba-smart-school.png" alt="Aba Smart School" />
-              </div>
-            </AnimatedView>
-
-            {/* Project Card 2 */}
-            <AnimatedView delay={0.2} className={styles.projectCard}>
-              <div className={styles.cardHeader}>
-                <span className={`${styles.cardTag} ${styles.cardTagActive}`}>Near Completion</span>
-                <span className={styles.cardYear}>2024</span>
-              </div>
-
-              <h3 className={styles.projectTitle}>Umuahia General Hospital Upgrade</h3>
-              <p className={styles.projectDesc}>
-                Full-scale renovation of the emergency ward and installation of state-of-the-art diagnostic equipment to improve healthcare delivery.
-              </p>
-
-              <div className={styles.metaGrid}>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  Umuahia North, Abia State
-                </div>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  Nov 15, 2024
-                </div>
-              </div>
-
-              <a href="#" className={styles.trackLink}>
-                Track progress
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
-
-              <div className={styles.cardImageContainer}>
-                <img src="/umuahia-hospital.png" alt="Umuahia General Hospital" />
-              </div>
-            </AnimatedView>
-
-            {/* Project Card 3 */}
-            <AnimatedView delay={0.3} className={styles.projectCard}>
-              <div className={styles.cardHeader}>
-                <span className={`${styles.cardTag} ${styles.cardTagActive}`}>Ongoing</span>
-                <span className={styles.cardYear}>2025</span>
-              </div>
-
-              <h3 className={styles.projectTitle}>Rural Access Road Network</h3>
-              <p className={styles.projectDesc}>
-                Construction of 45km of rural access roads to connect agricultural communities to major markets and improve economic activity.
-              </p>
-
-              <div className={styles.metaGrid}>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  Multiple LGAs
-                </div>
-                <div className={styles.metaItem}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  Jan 20, 2025
-                </div>
-              </div>
-
-              <a href="#" className={styles.trackLink}>
-                Track progress
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
-
-              <div className={styles.cardImageContainer}>
-                <img src="/rural-access-road.png" alt="Rural Access Road" />
-              </div>
-            </AnimatedView>
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
@@ -267,9 +199,6 @@ export default async function Home() {
             {displayMedia.map((item, index) => (
               <div key={item.id || index} className={styles.mediaItem}>
                 <img src={item.src} alt={item.title} />
-                <div className={styles.mediaOverlay}>
-                  <span className={styles.mediaLabel}>{item.title}</span>
-                </div>
               </div>
             ))}
           </AnimatedView>

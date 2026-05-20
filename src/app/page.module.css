@@ -15,6 +15,7 @@
   max-width: 800px;
   position: relative;
   z-index: 2;
+  margin-top: 6rem;
 }
 
 .heroTitle {
