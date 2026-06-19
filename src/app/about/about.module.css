@@ -197,70 +197,92 @@
     margin: 0 auto 5rem;
 }
 
-.leadershipGrid {
+.leadershipText {
+    font-size: 1.15rem;
+    color: #6B7280;
+    line-height: 1.6;
+}
+
+.governorCard {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 3rem;
+    grid-template-columns: 450px 1fr;
+    gap: 5rem;
+    align-items: center;
+    background: var(--surface);
+    border-radius: 24px;
+    padding: 4rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.leaderCard {
-    background: #FFFFFF;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid #F3F4F6;
+.governorCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
 }
 
-.leaderCard:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.leaderImage {
-    height: 380px;
-    width: 100%;
-    background-color: #E5E7EB;
+.governorImageContainer {
     position: relative;
+    height: 520px;
+    border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
 }
 
-.leaderImage img {
-    width: 100%;
-    height: 100%;
+.governorImageContainer img {
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.leaderCard:hover .leaderImage img {
-    transform: scale(1.05);
-    /* Subtle zoom on hover */
+.governorCard:hover .governorImageContainer img {
+    transform: scale(1.04);
 }
 
-.leaderInfo {
-    padding: 2rem;
-    text-align: center;
+.governorContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.leaderName {
-    font-size: 1.35rem;
+.governorBadge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--pib-red);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: rgba(215, 38, 56, 0.08);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+}
+
+.governorName {
+    font-size: 2.25rem;
     font-weight: 700;
     color: var(--pib-black);
     margin-bottom: 0.5rem;
+    line-height: 1.2;
 }
 
-.leaderRole {
-    font-size: 0.9rem;
-    color: var(--pib-red);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
+.governorRole {
+    font-size: 1.15rem;
+    color: #4B5563;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
 }
 
-.leaderBio {
-    font-size: 0.95rem;
-    color: #6B7280;
-    line-height: 1.6;
+.divider {
+    width: 60px;
+    height: 4px;
+    background-color: var(--pib-red);
+    margin-bottom: 2rem;
+    border-radius: 2px;
+}
+
+.governorBio {
+    font-size: 1.15rem;
+    color: #4B5563;
+    line-height: 1.85;
 }
 
 @media (max-width: 900px) {
@@ -294,5 +316,28 @@
 
     .fullWidthImageSection {
         height: 40vh;
+    }
+
+    .governorCard {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 2.5rem 2rem;
+    }
+
+    .governorImageContainer {
+        height: 400px;
+    }
+
+    .governorName {
+        font-size: 1.85rem;
+    }
+
+    .governorRole {
+        font-size: 1.05rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .governorBio {
+        font-size: 1.05rem;
     }
 }

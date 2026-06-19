@@ -82,7 +82,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                                     </div>
                                 </div>
 
-                                {project.completion_date && (
+                                {project.completion_date && project.show_completion_date && (
                                     <div className={styles.statItem}>
                                         <div className={styles.statLabel}>Expected Completion</div>
                                         <div className={styles.statValue}>

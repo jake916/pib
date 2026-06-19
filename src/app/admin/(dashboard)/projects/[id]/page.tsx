@@ -237,7 +237,9 @@ export default function ProjectDetailsPage() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#475569' }}>
                                     <Calendar size={20} color="#16A34A" />
                                     <div>
-                                        <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 500 }}>Estimated Completion</div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 500 }}>
+                                            Estimated Completion ({project.show_completion_date ? 'Publicly Visible' : 'Hidden from Public/Gov'})
+                                        </div>
                                         <div style={{ fontWeight: 500 }}>{new Date(project.completion_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</div>
                                     </div>
                                 </div>
@@ -384,6 +386,19 @@ export default function ProjectDetailsPage() {
                                             className={styles.input} 
                                             defaultValue={project.completion_date || ''} 
                                         />
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                            <input 
+                                                type="checkbox" 
+                                                name="showCompletionDate" 
+                                                id="showCompletionDate_edit"
+                                                value="true"
+                                                defaultChecked={project.show_completion_date}
+                                                style={{ width: '1rem', height: '1rem', cursor: 'pointer' }}
+                                            />
+                                            <label htmlFor="showCompletionDate_edit" style={{ fontSize: '0.8rem', color: '#64748B', cursor: 'pointer', fontWeight: 500 }}>
+                                                Make completion date visible to public and gov admins
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 

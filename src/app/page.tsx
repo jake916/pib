@@ -74,7 +74,6 @@ export default async function Home() {
           <AnimatedView className={statStyles.statsGrid}>
             <StatCounter value={300} suffix="+" label="Active Projects" />
             <StatCounter value={17} label="LGAs Covered" />
-            <StatCounter value={89} suffix="%" label="On Track" color="#D72638" />
           </AnimatedView>
         </div>
       </section>

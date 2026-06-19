@@ -168,6 +168,18 @@ export default function GovernmentProjectDetailsPage() {
                                     <div style={{ fontWeight: 600, color: '#1E293B' }}>{new Date(project.start_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</div>
                                 </div>
                             </div>
+
+                            {project.completion_date && project.show_completion_date && (
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                    <div style={{ padding: '0.625rem', backgroundColor: '#F0FDF4', borderRadius: '0.75rem' }}>
+                                        <Calendar size={20} color="#16A34A" />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.8125rem', color: '#94A3B8', fontWeight: 600, marginBottom: '0.25rem' }}>ESTIMATED COMPLETION</div>
+                                        <div style={{ fontWeight: 600, color: '#16A34A' }}>{new Date(project.completion_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

@@ -13,6 +13,7 @@ export type Project = {
     description: string;
     start_date: string;
     completion_date?: string | null;
+    show_completion_date?: boolean;
     images: string[];
     is_accessible_to_gov: boolean;
     smartsheet_link?: string | null;
@@ -203,6 +204,7 @@ export async function createProject(formData: FormData) {
     const description = formData.get('description') as string
     const startDate = formData.get('startDate') as string
     const completionDate = formData.get('completionDate') as string || null
+    const showCompletionDate = formData.get('showCompletionDate') === 'true'
     const imageFiles = formData.getAll('images') as File[]
 
     const imageUrls: string[] = []
@@ -228,6 +230,7 @@ export async function createProject(formData: FormData) {
             description,
             start_date: startDate,
             completion_date: completionDate,
+            show_completion_date: showCompletionDate,
             images: imageUrls,
             is_accessible_to_gov: formData.get('isAccessibleToGov') === 'true',
             smartsheet_link: formData.get('smartsheetLink') as string || null
@@ -255,6 +258,7 @@ export async function updateProject(id: string, formData: FormData) {
     const description = formData.get('description') as string
     const startDate = formData.get('startDate') as string
     const completionDate = formData.get('completionDate') as string || null
+    const showCompletionDate = formData.get('showCompletionDate') === 'true'
     const imageFiles = formData.getAll('images') as File[]
     const existingImages = formData.get('existingImages') ? JSON.parse(formData.get('existingImages') as string) : []
 
@@ -283,6 +287,7 @@ export async function updateProject(id: string, formData: FormData) {
             description,
             start_date: startDate,
             completion_date: completionDate,
+            show_completion_date: showCompletionDate,
             images: imageUrls,
             is_accessible_to_gov: formData.get('isAccessibleToGov') === 'true',
             smartsheet_link: formData.get('smartsheetLink') as string || null

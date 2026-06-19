@@ -326,6 +326,19 @@ export default function AdminProjectsPage() {
                                             className={styles.input} 
                                             defaultValue={editingProject?.completion_date || ''} 
                                         />
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                            <input 
+                                                type="checkbox" 
+                                                name="showCompletionDate" 
+                                                id="showCompletionDate"
+                                                value="true"
+                                                defaultChecked={editingProject ? editingProject.show_completion_date : true}
+                                                style={{ width: '1rem', height: '1rem', cursor: 'pointer' }}
+                                            />
+                                            <label htmlFor="showCompletionDate" style={{ fontSize: '0.8rem', color: '#64748B', cursor: 'pointer', fontWeight: 500 }}>
+                                                Make completion date visible to public and gov admins
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
