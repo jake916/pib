@@ -30,12 +30,6 @@ export default function AboutPage() {
             {/* Leadership */}
             <section className={styles.leadership}>
                 <div className="container">
-                    <div className={styles.leadershipHeader}>
-                        <h2 className={styles.sectionTitle}>Our Leadership</h2>
-                        <p className={styles.leadershipText}>
-                            The bureau is driven by the state's vision of infrastructure excellence and quality assurance.
-                        </p>
-                    </div>
 
                     <div className={styles.governorCard}>
                         <AnimatedView delay={0.2} className={styles.governorImageContainer}>
@@ -60,31 +54,21 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Overview - Split Section */}
+            {/* Overview - Centered Section */}
             <section className={styles.overview}>
                 <div className="container">
-                    <div className={styles.splitSection}>
-                        <AnimatedView delay={0.4} className={styles.imageContainer}>
-                            <Image
-                                src="/Governor Alex Otti 2 (1).jpeg"
-                                alt="PIB Overview"
-                                fill
-                                style={{ objectFit: 'cover' }}
-                            />
-                        </AnimatedView>
-                        <AnimatedView delay={0.2} className={styles.contentContainer}>
-                            <h2 className={styles.sectionTitle}>Overview</h2>
-                            <p className={styles.overviewText}>
-                                The PIB was established to ensure maximum value, quality standard, adherence to schedule and budget on Projects with significant budget implications across Abia State. 
-                            </p>
-                            <p className={styles.overviewText}>
-                                It aligns with the Abia State Government’s commitment to ensure that public resources are applied judiciously.
-                            </p>
-                            <p className={styles.overviewText}>
-                                The PIB serves as a Design Assurance Gate, ensuring preliminary investigation, multi-disciplinary review, adherence to structural code, material testing, before site mobilization and during the execution of projects.
-                            </p>
-                        </AnimatedView>
-                    </div>
+                    <AnimatedView delay={0.2} className={styles.overviewContentCentered}>
+                        <h2 className={styles.sectionTitle}>Overview</h2>
+                        <p className={styles.overviewText}>
+                            The PIB was established to ensure maximum value, quality standard, adherence to schedule and budget on Projects with significant budget implications across Abia State. 
+                        </p>
+                        <p className={styles.overviewText}>
+                            It aligns with the Abia State Government’s commitment to ensure that public resources are applied judiciously.
+                        </p>
+                        <p className={styles.overviewText}>
+                            The PIB serves as a Design Assurance Gate, ensuring preliminary investigation, multi-disciplinary review, adherence to structural code, material testing, before site mobilization and during the execution of projects.
+                        </p>
+                    </AnimatedView>
                 </div>
             </section>
 
@@ -132,7 +116,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-           {/* Leadership */}
+            {/* Leadership */}
             <section className={styles.leadership}>
                 <div className="container">
                     <div className={styles.leadershipHeader}>
@@ -142,24 +126,23 @@ export default function AboutPage() {
                         </p>
                     </div>
 
-                    <div className={styles.governorCard}>
-                        <AnimatedView delay={0.2} className={styles.governorImageContainer}>
+                    <div className={styles.leaderCardCentered}>
+                        <AnimatedView delay={0.2} className={styles.leaderImageContainer}>
                             <Image
-                                src="/Governor Alex Otti 2 (1).jpeg"
-                                alt="His Excellency, Dr. Alex Otti"
+                                src="/WhatsApp Image 2026-06-24 at 11.23.53.jpeg"
+                                alt="Mr. Onyinye Nwosu (M.Sc, PMP)"
                                 fill
-                                style={{ objectFit: 'cover' }}
+                                style={{ objectFit: 'cover', objectPosition: 'top' }}
                                 priority
                             />
                         </AnimatedView>
-                        <AnimatedView delay={0.4} className={styles.governorContent}>
-                            <span className={styles.governorBadge}>Executive Leadership</span>
-                            <h3 className={styles.governorName}>His Excellency, Dr. Alex Otti</h3>
-                            <div className={styles.governorRole}>Executive Governor, Abia State</div>
-                            <div className={styles.divider}></div>
-                            <p className={styles.governorBio}>
-                                The Abia State Project Implementation Bureau (ASPIB) is an initiative established by Alex Chioma Otti in 2025 to ensure that quality standards are consistently adhered to across all infrastructural development projects in Abia State. The Bureau utilizes project management principles and best practices as tools for quality assurance and quality control, ensuring that government projects are executed efficiently, transparently, and in accordance with established standards.
-                            </p>
+                        <AnimatedView delay={0.4} className={styles.leaderContentCentered}>
+                    
+                            <h3 className={styles.governorName}>
+                                Mr. Onyinye Nwosu <span className={styles.qualifications}>(M.Sc, PMP)</span>
+                            </h3>
+                            <div className={styles.governorRole}>Director General (DG)</div>
+                            <div className={styles.leaderSubRole}>Abia State Project Implementation Bureau</div>
                         </AnimatedView>
                     </div>
                 </div>
