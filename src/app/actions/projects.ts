@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { requireRole } from './admin'
+import { syncProjectMediaAlbum, deleteProjectMediaAlbum } from './media'
 
 export type Project = {
     id: string;
@@ -220,6 +221,8 @@ export async function createProject(formData: FormData) {
         }
     }
 
+    const addToMedia = formData.get('addToMedia') === 'true'
+
     const { data, error } = await supabase
         .from('projects')
         .insert([{
@@ -242,6 +245,10 @@ export async function createProject(formData: FormData) {
         throw new Error(`Failed to create project: ${error.message}`)
     }
 
+    if (addToMedia && data?.id) {
+        await syncProjectMediaAlbum(data.id, title, imageUrls)
+    }
+
     revalidatePath('/projects')
     revalidatePath('/admin/projects')
     return data
@@ -261,6 +268,7 @@ export async function updateProject(id: string, formData: FormData) {
     const showCompletionDate = formData.get('showCompletionDate') === 'true'
     const imageFiles = formData.getAll('images') as File[]
     const existingImages = formData.get('existingImages') ? JSON.parse(formData.get('existingImages') as string) : []
+    const addToMedia = formData.get('addToMedia') === 'true'
 
     const imageUrls: string[] = [...existingImages]
     
@@ -298,6 +306,12 @@ export async function updateProject(id: string, formData: FormData) {
         throw new Error(`Failed to update project: ${error.message}`)
     }
 
+    if (addToMedia) {
+        await syncProjectMediaAlbum(id, title, imageUrls)
+    } else {
+        await deleteProjectMediaAlbum(id)
+    }
+
     revalidatePath('/projects')
     revalidatePath('/admin/projects')
 }
@@ -305,6 +319,8 @@ export async function updateProject(id: string, formData: FormData) {
 export async function deleteProject(id: string) {
     await requireRole(['project_admin', 'administrator'])
     const supabase = await createClient()
+
+    await deleteProjectMediaAlbum(id)
 
     const { error } = await supabase
         .from('projects')
@@ -318,3 +334,4 @@ export async function deleteProject(id: string) {
     revalidatePath('/projects')
     revalidatePath('/admin/projects')
 }
+

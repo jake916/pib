@@ -9,6 +9,7 @@ export type Album = {
     title: string
     cover_url: string
     created_at: string
+    project_id?: string | null
 }
 
 export type Video = {
@@ -35,6 +36,7 @@ export type MediaItem = {
     count?: number
     date: string
     videoUrl?: string
+    project_id?: string | null
 }
 
 async function uploadFileToSupabase(file: File, path: string) {
@@ -132,7 +134,8 @@ export async function getMediaItems(): Promise<MediaItem[]> {
         title: a.title,
         cover: a.cover_url || '/placeholder.png',
         count: a.photos?.[0]?.count || 0,
-        date: new Date(a.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        date: new Date(a.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        project_id: a.project_id || null
     }))
 
     const videos: MediaItem[] = videosResult.data.map((v: any) => ({
@@ -371,3 +374,87 @@ export async function getFeaturedPhotos(): Promise<Photo[]> {
     }
     return data || []
 }
+
+export async function syncProjectMediaAlbum(projectId: string, projectTitle: string, imageUrls: string[]) {
+    try {
+        const supabase = await createClient()
+
+        // Check if an album already exists for this project
+        const { data: existingAlbums } = await supabase
+            .from('albums')
+            .select('*')
+            .eq('project_id', projectId)
+
+        let albumId: string
+        const coverUrl = imageUrls.length > 0 ? imageUrls[0] : '/placeholder.png'
+
+        if (existingAlbums && existingAlbums.length > 0) {
+            albumId = existingAlbums[0].id
+            // Update existing album title and cover
+            await supabase
+                .from('albums')
+                .update({ title: projectTitle, cover_url: coverUrl })
+                .eq('id', albumId)
+        } else {
+            // Create new album for project
+            const { data: newAlbum, error: insertError } = await supabase
+                .from('albums')
+                .insert({
+                    title: projectTitle,
+                    cover_url: coverUrl,
+                    project_id: projectId
+                })
+                .select()
+                .single()
+
+            if (insertError) {
+                console.error('[syncProjectMediaAlbum] Error creating album:', insertError.message)
+                return null
+            }
+            albumId = newAlbum.id
+        }
+
+        // Delete existing photos for this album to avoid duplicates
+        await supabase.from('photos').delete().eq('album_id', albumId)
+
+        // Insert photos if any
+        if (imageUrls.length > 0) {
+            const photoRows = imageUrls.map(url => ({
+                album_id: albumId,
+                url,
+                title: projectTitle
+            }))
+            await supabase.from('photos').insert(photoRows)
+        }
+
+        revalidatePath('/media')
+        revalidatePath('/admin/media')
+        revalidatePath(`/admin/media/${albumId}`)
+        return albumId
+    } catch (e) {
+        console.error('[syncProjectMediaAlbum] Exception during sync:', e)
+        return null
+    }
+}
+
+export async function deleteProjectMediaAlbum(projectId: string) {
+    try {
+        const supabase = await createClient()
+        const { data: albums } = await supabase
+            .from('albums')
+            .select('id')
+            .eq('project_id', projectId)
+
+        if (albums && albums.length > 0) {
+            for (const album of albums) {
+                await supabase.from('photos').delete().eq('album_id', album.id)
+                await supabase.from('albums').delete().eq('id', album.id)
+            }
+            revalidatePath('/media')
+            revalidatePath('/admin/media')
+        }
+    } catch (e) {
+        console.error('[deleteProjectMediaAlbum] Exception during delete:', e)
+    }
+}
+

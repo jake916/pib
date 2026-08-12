@@ -44,7 +44,8 @@ export default function AlbumDetailsPage() {
                 id: data.id,
                 title: data.title,
                 cover_url: data.cover_url,
-                created_at: data.created_at
+                created_at: data.created_at,
+                project_id: data.project_id || null
             });
             setPhotos(data.photos || []);
         } catch (error: any) {
@@ -143,7 +144,7 @@ export default function AlbumDetailsPage() {
                     </div>
                 </div>
                 <div className={styles.headerActions}>
-                    {id !== 'hero-section' && (
+                    {id !== 'hero-section' && !album?.project_id && (
                         <button className={styles.addButton} onClick={() => setIsAddImageOpen(true)}>
                             <Plus size={18} />
                             Add Photos
@@ -151,6 +152,50 @@ export default function AlbumDetailsPage() {
                     )}
                 </div>
             </div>
+
+            {/* Project-Managed Notice Banner */}
+            {album?.project_id && (
+                <div style={{
+                    margin: '1.5rem 0',
+                    padding: '1.25rem 1.5rem',
+                    backgroundColor: '#EFF6FF',
+                    border: '1px solid #BFDBFE',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+                    flexWrap: 'wrap'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <span style={{ fontSize: '1.5rem' }}>ℹ️</span>
+                        <div>
+                            <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#1E40AF', margin: 0 }}>
+                                Project-Managed Media Album
+                            </h3>
+                            <p style={{ fontSize: '0.85rem', color: '#1D4ED8', margin: '0.25rem 0 0' }}>
+                                Media items in this album are synced automatically and can only be managed from the Project Details page.
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => router.push(`/admin/projects/${album.project_id}`)}
+                        style={{
+                            padding: '0.5rem 1.25rem',
+                            backgroundColor: '#1D4ED8',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'background-color 0.2s'
+                        }}
+                    >
+                        Go to Project
+                    </button>
+                </div>
+            )}
 
             {isLoading && (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
@@ -197,25 +242,27 @@ export default function AlbumDetailsPage() {
                                 >
                                     <Star size={16} fill={img.is_featured ? "#EAB308" : "none"} />
                                 </button>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setDeletePhotoId(img.id);
-                                    }}
-                                    style={{
-                                        background: 'rgba(255, 255, 255, 0.9)',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        padding: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: '#EF4444'
-                                    }}
-                                >
-                                    <Trash2 size={16} />
-                                </button>
+                                {!album?.project_id && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setDeletePhotoId(img.id);
+                                        }}
+                                        style={{
+                                            background: 'rgba(255, 255, 255, 0.9)',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            padding: '4px',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#EF4444'
+                                        }}
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}

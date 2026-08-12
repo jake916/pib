@@ -106,8 +106,8 @@ export default function AboutPage() {
                         </AnimatedView>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
                             <Image
-                                src="/media_tech_hub_1770377634654.png"
-                                alt="Future Vision"
+                                src="/WhatsApp Image 2026-02-17 at 8.38.43 PM (4).jpeg"
+                                alt="Our Vision"
                                 fill
                                 style={{ objectFit: 'cover' }}
                             />

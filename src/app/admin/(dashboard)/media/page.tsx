@@ -102,6 +102,11 @@ export default function MediaPage() {
         e.stopPropagation();
         setActiveMenuId(null);
 
+        if (item.project_id && (action === 'edit' || action === 'delete')) {
+            toast.info('This media album is linked to a Project and can only be managed from the Project details page.');
+            return;
+        }
+
         if (action === 'select') {
             setSelectionMode(true);
             setSelectedItems(new Set([item.id]));
@@ -386,9 +391,9 @@ export default function MediaPage() {
                                 </div>
                             </div>
 
-                            <div className={styles.cardTypeBadge}>
+                            <div className={styles.cardTypeBadge} style={item.project_id ? { backgroundColor: 'rgba(30, 64, 175, 0.95)', color: '#FFFFFF' } : {}}>
                                 {item.type === 'album' ? <Folder size={12} /> : <Film size={12} />}
-                                {item.type === 'album' ? 'Album' : 'Video'}
+                                {item.type === 'album' ? (item.project_id ? 'Project Album' : 'Album') : 'Video'}
                             </div>
 
                             {(selectionMode || selectedItems.has(item.id)) && (

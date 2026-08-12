@@ -297,18 +297,6 @@ export default function AdminProjectsPage() {
                                         </select>
                                     </div>
                                     <div className={styles.formGroup}>
-                                        <label className={styles.label}>Project Images (Max 7)</label>
-                                        <input type="file" name="images" className={styles.input} accept="image/*" multiple />
-                                        {editingProject && editingProject.images && editingProject.images.length > 0 && (
-                                            <div style={{ marginTop: '8px', fontSize: '0.8rem', color: '#64748B' }}>
-                                                {editingProject.images.length} existing images saved.
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className={styles.formGrid}>
-                                    <div className={styles.formGroup}>
                                         <label className={styles.label}>Start Date</label>
                                         <input 
                                             type="date" 
@@ -318,6 +306,9 @@ export default function AdminProjectsPage() {
                                             required 
                                         />
                                     </div>
+                                </div>
+
+                                <div className={styles.formGrid}>
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Completion Date (Optional)</label>
                                         <input 
@@ -337,6 +328,29 @@ export default function AdminProjectsPage() {
                                             />
                                             <label htmlFor="showCompletionDate" style={{ fontSize: '0.8rem', color: '#64748B', cursor: 'pointer', fontWeight: 500 }}>
                                                 Make completion date visible to public and gov admins
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>Project Images (Max 7)</label>
+                                        <input type="file" name="images" className={styles.input} accept="image/*" multiple />
+                                        {editingProject && editingProject.images && editingProject.images.length > 0 && (
+                                            <div style={{ marginTop: '4px', fontSize: '0.75rem', color: '#64748B' }}>
+                                                {editingProject.images.length} existing images saved.
+                                            </div>
+                                        )}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                            <input 
+                                                type="checkbox" 
+                                                name="addToMedia" 
+                                                id="addToMediaModal"
+                                                value="true"
+                                                defaultChecked={true}
+                                                style={{ width: '1rem', height: '1rem', cursor: 'pointer', accentColor: '#D72638' }}
+                                            />
+                                            <label htmlFor="addToMediaModal" style={{ fontSize: '0.8rem', color: '#64748B', cursor: 'pointer', fontWeight: 500 }}>
+                                                Add images to Media Gallery (creates album)
                                             </label>
                                         </div>
                                     </div>

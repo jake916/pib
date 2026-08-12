@@ -82,7 +82,7 @@ export default async function Home() {
       <section className={styles.projects} id="projects">
         <div className="container">
           <AnimatedView className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Latest Projects</h2>
+            <h2 className={styles.sectionTitle}>Projects</h2>
             <p className={styles.sectionDesc}>
               Track the progress of key infrastructure, healthcare, and educational initiatives across the state.
             </p>

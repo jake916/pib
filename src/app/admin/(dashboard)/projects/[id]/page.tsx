@@ -362,13 +362,6 @@ export default function ProjectDetailsPage() {
                                         </select>
                                     </div>
                                     <div className={styles.formGroup}>
-                                        <label className={styles.label}>Project Images (Max 7)</label>
-                                        <input type="file" name="images" className={styles.input} accept="image/*" multiple />
-                                    </div>
-                                </div>
-
-                                <div className={styles.formGrid}>
-                                    <div className={styles.formGroup}>
                                         <label className={styles.label}>Start Date</label>
                                         <input 
                                             type="date" 
@@ -378,6 +371,9 @@ export default function ProjectDetailsPage() {
                                             required 
                                         />
                                     </div>
+                                </div>
+
+                                <div className={styles.formGrid}>
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Completion Date</label>
                                         <input 
@@ -400,6 +396,24 @@ export default function ProjectDetailsPage() {
                                             </label>
                                         </div>
                                     </div>
+
+                                     <div className={styles.formGroup}>
+                                         <label className={styles.label}>Project Images (Max 7)</label>
+                                         <input type="file" name="images" className={styles.input} accept="image/*" multiple />
+                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                             <input 
+                                                 type="checkbox" 
+                                                 name="addToMedia" 
+                                                 id="addToMediaEdit"
+                                                 value="true"
+                                                 defaultChecked={true}
+                                                 style={{ width: '1rem', height: '1rem', cursor: 'pointer', accentColor: '#D72638' }}
+                                             />
+                                             <label htmlFor="addToMediaEdit" style={{ fontSize: '0.8rem', color: '#64748B', cursor: 'pointer', fontWeight: 500 }}>
+                                                 Add images to Media Gallery (creates album)
+                                             </label>
+                                         </div>
+                                     </div>
                                 </div>
 
                                 <div className={styles.formGroup}>
