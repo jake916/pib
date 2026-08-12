@@ -27,6 +27,39 @@ export default function AboutPage() {
                 </div>
             </section>
 
+            {/* Leadership */}
+            <section className={styles.leadership}>
+                <div className="container">
+                    <div className={styles.leadershipHeader}>
+                        <h2 className={styles.sectionTitle}>Our Leadership</h2>
+                        <p className={styles.leadershipText}>
+                            The bureau is driven by the state's vision of infrastructure excellence and quality assurance.
+                        </p>
+                    </div>
+
+                    <div className={styles.governorCard}>
+                        <AnimatedView delay={0.2} className={styles.governorImageContainer}>
+                            <Image
+                                src="/Governor Alex Otti 2 (1).jpeg"
+                                alt="His Excellency, Dr. Alex Otti"
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                priority
+                            />
+                        </AnimatedView>
+                        <AnimatedView delay={0.4} className={styles.governorContent}>
+                            <span className={styles.governorBadge}>Executive Leadership</span>
+                            <h3 className={styles.governorName}>His Excellency, Dr. Alex Otti</h3>
+                            <div className={styles.governorRole}>Executive Governor, Abia State</div>
+                            <div className={styles.divider}></div>
+                            <p className={styles.governorBio}>
+                                The Abia State Project Implementation Bureau (ASPIB) is an initiative established by Alex Chioma Otti in 2025 to ensure that quality standards are consistently adhered to across all infrastructural development projects in Abia State. The Bureau utilizes project management principles and best practices as tools for quality assurance and quality control, ensuring that government projects are executed efficiently, transparently, and in accordance with established standards.
+                            </p>
+                        </AnimatedView>
+                    </div>
+                </div>
+            </section>
+
             {/* Overview - Split Section */}
             <section className={styles.overview}>
                 <div className="container">
@@ -99,7 +132,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Leadership */}
+           {/* Leadership */}
             <section className={styles.leadership}>
                 <div className="container">
                     <div className={styles.leadershipHeader}>
@@ -130,7 +163,7 @@ export default function AboutPage() {
                         </AnimatedView>
                     </div>
                 </div>
-            </section>
+            </section> 
 
             {/* Full Width Impact Image */}
             <section className={styles.fullWidthImageSection}>
