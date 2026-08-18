@@ -37,21 +37,27 @@ export type BlogAuthor = {
 }
 
 export async function getPosts(options?: { publishedOnly?: boolean }): Promise<BlogPost[]> {
-    const supabase = await createClient()
+    try {
+        const supabase = await createClient()
 
-    let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
+        let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
 
-    if (options?.publishedOnly) {
-        query = query.eq('published', true).lte('published_at', new Date().toISOString())
+        if (options?.publishedOnly) {
+            query = query.eq('published', true).lte('published_at', new Date().toISOString())
+        }
+
+        const { data, error } = await query
+
+        if (error) {
+            console.warn('[getPosts] Supabase error:', error.message)
+            return []
+        }
+
+        return data || []
+    } catch (e) {
+        console.error('[getPosts] Fetch error:', e)
+        return []
     }
-
-    const { data, error } = await query
-
-    if (error) {
-        throw new Error(error.message)
-    }
-
-    return data || []
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
