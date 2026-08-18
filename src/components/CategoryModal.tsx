@@ -30,7 +30,11 @@ export default function CategoryModal({ isOpen, onClose, onCategoriesChange, cat
         if (!newCategoryName.trim()) return;
         setIsAdding(true);
         try {
-            await createCategory(newCategoryName.trim());
+            const res = await createCategory(newCategoryName.trim());
+            if (res && (res as any).error) {
+                toast.error((res as any).error);
+                return;
+            }
             setNewCategoryName('');
             await onCategoriesChange();
             toast.success('Category added');
@@ -44,7 +48,11 @@ export default function CategoryModal({ isOpen, onClose, onCategoriesChange, cat
     const handleUpdate = async (id: string) => {
         if (!editingName.trim()) return;
         try {
-            await updateCategory(id, editingName.trim());
+            const res: any = await updateCategory(id, editingName.trim());
+            if (res && res.error) {
+                toast.error(res.error);
+                return;
+            }
             setEditingId(null);
             await onCategoriesChange();
             toast.success('Category updated');
@@ -56,7 +64,11 @@ export default function CategoryModal({ isOpen, onClose, onCategoriesChange, cat
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure? This will affect projects using this category.')) return;
         try {
-            await deleteCategory(id);
+            const res: any = await deleteCategory(id);
+            if (res && res.error) {
+                toast.error(res.error);
+                return;
+            }
             await onCategoriesChange();
             toast.success('Category deleted');
         } catch (error: any) {

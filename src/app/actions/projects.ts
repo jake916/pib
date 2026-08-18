@@ -62,28 +62,53 @@ export async function getCategories() {
 }
 
 export async function createCategory(name: string) {
-    await requireRole(['project_admin', 'administrator'])
-    const supabase = await createClient()
-    const { data, error } = await supabase.from('project_categories').insert([{ name }]).select().single()
-    if (error) throw new Error(`Failed to create category: ${error.message}`)
-    revalidatePath('/admin/projects')
-    return data as Category
+    try {
+        await requireRole(['project_admin', 'administrator'])
+        const supabase = await createClient()
+        const { data, error } = await supabase.from('project_categories').insert([{ name }]).select().single()
+        if (error) throw new Error(`Failed to create category: ${error.message}`)
+        revalidatePath('/admin/projects')
+        return { success: true, data: data as Category }
+    } catch (e: any) {
+        return { success: false, error: e.message || 'Failed to create category' }
+    }
 }
 
 export async function deleteCategory(id: string) {
-    await requireRole(['project_admin', 'administrator'])
-    const supabase = await createClient()
-    const { error } = await supabase.from('project_categories').delete().eq('id', id)
-    if (error) throw new Error(`Failed to delete category: ${error.message}`)
-    revalidatePath('/admin/projects')
+    try {
+        await requireRole(['project_admin', 'administrator'])
+
+        // If deleting a mock fallback category (e.g. f1, f2) that isn't stored in DB
+        if (id.startsWith('f')) {
+            return { success: true }
+        }
+
+        const supabase = await createClient()
+        const { error } = await supabase.from('project_categories').delete().eq('id', id)
+        if (error) throw new Error(`Failed to delete category: ${error.message}`)
+        revalidatePath('/admin/projects')
+        return { success: true }
+    } catch (e: any) {
+        return { success: false, error: e.message || 'Failed to delete category' }
+    }
 }
 
 export async function updateCategory(id: string, name: string) {
-    await requireRole(['project_admin', 'administrator'])
-    const supabase = await createClient()
-    const { error } = await supabase.from('project_categories').update({ name }).eq('id', id)
-    if (error) throw new Error(`Failed to update category: ${error.message}`)
-    revalidatePath('/admin/projects')
+    try {
+        await requireRole(['project_admin', 'administrator'])
+
+        if (id.startsWith('f')) {
+            return createCategory(name)
+        }
+
+        const supabase = await createClient()
+        const { error } = await supabase.from('project_categories').update({ name }).eq('id', id)
+        if (error) throw new Error(`Failed to update category: ${error.message}`)
+        revalidatePath('/admin/projects')
+        return { success: true }
+    } catch (e: any) {
+        return { success: false, error: e.message || 'Failed to update category' }
+    }
 }
 
 async function uploadFileToSupabase(file: File, path: string) {
