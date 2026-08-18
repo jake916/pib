@@ -185,7 +185,7 @@ export default async function Home() {
             <AnimatedView delay={0.2} className={styles.mediaGrid}>
               {displayMedia.map((item, index) => (
                 <div key={item.id || index} className={styles.mediaItem}>
-                  <img src={item.src || item.url} alt={item.title || 'Media item'} />
+                  <img src={item.src} alt={item.title || 'Media item'} />
                 </div>
               ))}
             </AnimatedView>
