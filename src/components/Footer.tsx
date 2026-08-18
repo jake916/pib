@@ -62,10 +62,10 @@ export default function Footer({ showFeedback = true }: FooterProps) {
                         <div className={styles.footerCol}>
                             <h4>Explore</h4>
                             <div className={styles.footerLinks}>
-                                <Link href="#" className={styles.footerLink}>Home</Link>
-                                <Link href="#projects" className={styles.footerLink}>Projects</Link>
-                                <Link href="#media" className={styles.footerLink}>Media Gallery</Link>
-                                <Link href="#blog" className={styles.footerLink}>News & Updates</Link>
+                                <Link href="/" className={styles.footerLink}>Home</Link>
+                                <Link href="/projects" className={styles.footerLink}>Projects</Link>
+                                <Link href="/media" className={styles.footerLink}>Media Gallery</Link>
+                                <Link href="/blog" className={styles.footerLink}>News & Updates</Link>
                             </div>
                         </div>
 
@@ -73,10 +73,11 @@ export default function Footer({ showFeedback = true }: FooterProps) {
                         <div className={styles.footerCol}>
                             <h4>Organization</h4>
                             <div className={styles.footerLinks}>
-                                <Link href="#about" className={styles.footerLink}>About Us</Link>
-                                <Link href="#mandate" className={styles.footerLink}>Our Mandate</Link>
-                                <Link href="#leadership" className={styles.footerLink}>Leadership</Link>
-                                <Link href="#contact" className={styles.footerLink}>Contact Support</Link>
+                                <Link href="/about" className={styles.footerLink}>About Us</Link>
+                                <Link href="/#mandate" className={styles.footerLink}>Our Mandate</Link>
+                                <Link href="/about#leadership" className={styles.footerLink}>Leadership</Link>
+                                <Link href="/contact" className={styles.footerLink}>Contact Support</Link>
+                                <Link href="/reports" className={styles.footerLink}>Reports & Feedback</Link>
                             </div>
                         </div>
 

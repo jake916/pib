@@ -194,26 +194,30 @@ export async function updateAdminDetails(id: string, name: string, email: string
 
 // Delete admin
 export async function deleteAdmin(id: string) {
-    const caller = await requireAdministrator();
-    if (caller.id === id) throw new Error("You cannot delete yourself.");
+    try {
+        const caller = await requireAdministrator();
+        if (caller.id === id) throw new Error("You cannot delete yourself.");
 
-    const adminSupabase = getAdminSupabaseClient();
-    
-    // 1. Delete from admin_roles first to handle foreign key constraints
-    // This allows the user to be deleted from Auth without conflict
-    const { error: dbError } = await adminSupabase
-        .from('admin_roles')
-        .delete()
-        .eq('id', id);
+        const adminSupabase = getAdminSupabaseClient();
         
-    if (dbError) throw new Error(`Database Error: ${dbError.message}`);
-    
-    // 2. Delete from Auth (this will now succeed)
-    const { error: authError } = await adminSupabase.auth.admin.deleteUser(id);
-    
-    if (authError) throw new Error(`Auth Error: ${authError.message}`);
+        // 1. Delete from admin_roles first to handle foreign key constraints
+        const { error: dbError } = await adminSupabase
+            .from('admin_roles')
+            .delete()
+            .eq('id', id);
+            
+        if (dbError) throw new Error(`Database Error: ${dbError.message}`);
+        
+        // 2. Delete from Auth (this will now succeed)
+        const { error: authError } = await adminSupabase.auth.admin.deleteUser(id);
+        
+        if (authError) throw new Error(`Auth Error: ${authError.message}`);
 
-    revalidatePath('/admin/admins');
+        revalidatePath('/admin/admins');
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: e.message || "Failed to delete administrator." };
+    }
 }
 
 // Reset password

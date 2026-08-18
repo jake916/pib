@@ -103,7 +103,11 @@ export default function AdminsPage() {
     const handleDelete = async (id: string) => {
         if (!confirm("Are you incredibly sure you want to completely erase this user's administrative access? This cannot be undone.")) return;
         try {
-            await deleteAdmin(id);
+            const res = await deleteAdmin(id);
+            if (res && res.error) {
+                toast.error(res.error);
+                return;
+            }
             toast.success("Administrator successfully removed.");
             setAdmins(admins.filter(a => a.id !== id));
         } catch (error: any) {

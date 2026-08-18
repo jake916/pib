@@ -55,7 +55,7 @@ export default function AboutPage() {
             </section>
 
             {/* Overview - Centered Section */}
-            <section className={styles.overview}>
+            <section className={styles.overview} id="overview">
                 <div className="container">
                     <AnimatedView delay={0.2} className={styles.overviewContentCentered}>
                         <h2 className={styles.sectionTitle}>Overview</h2>
@@ -73,7 +73,7 @@ export default function AboutPage() {
             </section>
 
             {/* Our Mandate (Split Section Reversed) */}
-            <section className={`${styles.sectionBlock} ${styles.bgSurface}`}>
+            <section className={`${styles.sectionBlock} ${styles.bgSurface}`} id="mission">
                 <div className="container">
                     <div className={styles.splitSectionReversed}>
                         <AnimatedView delay={0.4} className={styles.imageContainer}>
@@ -117,7 +117,7 @@ export default function AboutPage() {
             </section>
 
             {/* Leadership */}
-            <section className={styles.leadership}>
+            <section className={styles.leadership} id="leadership">
                 <div className="container">
                     <div className={styles.leadershipHeader}>
                         <h2 className={styles.sectionTitle}>Our Leadership</h2>
