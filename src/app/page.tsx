@@ -19,21 +19,8 @@ export default async function Home() {
   const displayPosts = recentPostsRaw.slice(0, 3);
   const displayProjects = allProjects.slice(0, 3);
 
-  const defaultMedia: any[] = [
-    { id: 'd1', src: '/media-bridge.png', title: 'Infrastructure', type: 'image', date: '' },
-    { id: 'd2', src: '/media-solar.png', title: 'Renewable Energy', type: 'image', date: '' },
-    { id: 'd3', src: '/media-plaza.png', title: 'Urban Development', type: 'image', date: '' },
-    { id: 'd4', src: '/media-water.png', title: 'Water Resources', type: 'image', date: '' },
-    { id: 'd5', src: '/media-tech-hub.png', title: 'Technology & Innovation', type: 'image', date: '' },
-    { id: 'd6', src: '/media-market.png', title: 'Commerce & Trade', type: 'image', date: '' },
-    { id: 'd7', src: '/media-housing.png', title: 'Affordable Housing', type: 'image', date: '' },
-    { id: 'd8', src: '/media-bridge.png', title: 'Public Works', type: 'image', date: '' },
-  ];
+  const displayMedia = randomPhotos;
 
-  const displayMedia = [...randomPhotos];
-  if (displayMedia.length < 8) {
-    displayMedia.push(...defaultMedia.slice(displayMedia.length, 8));
-  }
   return (
     <main>
       {/* HERO SECTION */}
@@ -194,13 +181,19 @@ export default async function Home() {
             </p>
           </AnimatedView>
 
-          <AnimatedView delay={0.2} className={styles.mediaGrid}>
-            {displayMedia.map((item, index) => (
-              <div key={item.id || index} className={styles.mediaItem}>
-                <img src={item.src} alt={item.title} />
-              </div>
-            ))}
-          </AnimatedView>
+          {displayMedia.length > 0 ? (
+            <AnimatedView delay={0.2} className={styles.mediaGrid}>
+              {displayMedia.map((item, index) => (
+                <div key={item.id || index} className={styles.mediaItem}>
+                  <img src={item.src || item.url} alt={item.title || 'Media item'} />
+                </div>
+              ))}
+            </AnimatedView>
+          ) : (
+            <p style={{ textAlign: 'center', color: '#64748B', padding: '3rem 0', fontSize: '1.1rem' }}>
+              No uploaded media yet.
+            </p>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
             <Link href="/media" className={styles.trackLink} style={{ display: 'inline-flex', fontSize: '1rem' }}>
