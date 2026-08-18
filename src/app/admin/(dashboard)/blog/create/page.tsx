@@ -110,13 +110,28 @@ function BlogEditorForm() {
     const handleSubmit = async (e: React.FormEvent, publishStatus: boolean = false, publishAt?: string | null) => {
         e.preventDefault();
 
-        // Validation
-        const finalCategory = categories.find(c => c.id === selectedCategoryId)?.name || categoryName;
-        const finalAuthor = authors.find(a => a.id === selectedAuthorId)?.name || authorName;
+        const finalCategory = categories.find(c => c.id === selectedCategoryId)?.name || categoryName || 'Uncategorized';
+        const finalAuthor = authors.find(a => a.id === selectedAuthorId)?.name || authorName || 'Admin';
 
-        if (!title.trim() || !slug.trim() || !content.trim() || !finalCategory || !finalAuthor) {
-            toast.error('Please fill in Title, Slug, Content and select Category & Author');
-            return;
+        let postTitle = title.trim();
+        let postSlug = slug.trim();
+        let postContent = content;
+
+        // Validation based on action:
+        if (publishStatus) {
+            // Publishing requires all mandatory fields to be complete
+            if (!postTitle || !postSlug || !postContent.trim() || (!selectedCategoryId && !categoryName) || (!selectedAuthorId && !authorName)) {
+                toast.error('To publish, please fill in Title, Slug, Content and select Category & Author');
+                return;
+            }
+        } else {
+            // Saving Draft allows partial fields
+            if (!postTitle) {
+                postTitle = 'Untitled Draft';
+            }
+            if (!postSlug) {
+                postSlug = postTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') || `draft-${Date.now()}`;
+            }
         }
 
         setIsSaving(true);
@@ -133,9 +148,9 @@ function BlogEditorForm() {
             }
 
             const postData: Partial<BlogPost> = {
-                title,
-                slug,
-                content,
+                title: postTitle,
+                slug: postSlug,
+                content: postContent,
                 excerpt,
                 author: finalAuthor,
                 author_id: selectedAuthorId || null,
@@ -149,11 +164,11 @@ function BlogEditorForm() {
             if (editId) {
                 postData.cover_url = currentCoverUrl;
                 await updatePost(editId, postData, coverFile);
-                toast.success('Post updated');
+                toast.success(publishStatus ? 'Post published successfully' : 'Draft saved successfully');
                 router.push('/admin/blog');
             } else {
                 await createPost(postData, coverFile || undefined);
-                toast.success('Post created');
+                toast.success(publishStatus ? 'Post published successfully' : 'Draft saved successfully');
                 router.push('/admin/blog');
             }
         } catch (error: any) {

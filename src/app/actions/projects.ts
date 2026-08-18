@@ -46,18 +46,13 @@ export async function getCategories() {
         
         if (error) {
             console.warn('[getCategories] Supabase error:', error.message);
-            return FALLBACK_CATEGORIES;
+            return [];
         }
         
-        if (!data || data.length === 0) {
-            console.info('[getCategories] No categories found in DB, using fallbacks.');
-            return FALLBACK_CATEGORIES;
-        }
-        
-        return data as Category[]
+        return (data || []) as Category[]
     } catch (e) {
         console.error('[getCategories] Critical fetch error:', e);
-        return FALLBACK_CATEGORIES;
+        return [];
     }
 }
 
